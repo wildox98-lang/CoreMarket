@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+:root {
+  /* Surfaces */
+  --color-sand: #f3ebdb;
+  --color-sand-dark: #e7dbc3;
+  --color-cream: #fbf8f2;
+  --color-border: #e1d5be;
+
+  /* Ink */
+  --color-charcoal: #1e1e1a;
+  --color-olive-900: #262b1c;
+  --color-olive-700: #3f4a2e;
+  --color-olive-500: #5c6b43;
+  --color-olive-300: #9aa87f;
+
+  /* Accent */
+  --color-gold: #c08a2e;
+  /* Darkened from #9c6f22 so eyebrow labels/links meet 4.5:1 as text on sand/cream. */
+  --color-gold-dark: #8a611d;
+  --color-gold-light: #e9d3a3;
+
+  /* Status */
+  --color-destructive: #a3402a;
+  --color-success: #3f7d4f;
+
+  --background: var(--color-sand);
+  --foreground: var(--color-charcoal);
+
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 1px 2px rgba(38, 43, 28, 0.04), 0 8px 24px -12px rgba(38, 43, 28, 0.18);
+  --shadow-lift: 0 2px 4px rgba(38, 43, 28, 0.06), 0 20px 40px -16px rgba(38, 43, 28, 0.28);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-sand: var(--color-sand);
+  --color-sand-dark: var(--color-sand-dark);
+  --color-cream: var(--color-cream);
+  --color-border: var(--color-border);
+
+  --color-charcoal: var(--color-charcoal);
+  --color-olive-900: var(--color-olive-900);
+  --color-olive-700: var(--color-olive-700);
+  --color-olive-500: var(--color-olive-500);
+  --color-olive-300: var(--color-olive-300);
+
+  --color-gold: var(--color-gold);
+  --color-gold-dark: var(--color-gold-dark);
+  --color-gold-light: var(--color-gold-light);
+
+  --color-destructive: var(--color-destructive);
+  --color-success: var(--color-success);
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-work-sans);
+
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-soft: var(--shadow-soft);
+  --shadow-lift: var(--shadow-lift);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: var(--color-gold-light);
+  color: var(--color-olive-900);
+}
+
+/* Deckle-edge divider — a torn-kraft-paper motif used between sections instead of a hairline rule */
+.divider-deckle {
+  position: relative;
+  height: 1.5rem;
+  overflow: hidden;
+}
+
+.divider-deckle svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

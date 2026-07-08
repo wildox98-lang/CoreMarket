@@ -1,0 +1,116 @@
+// Prisma schema for Core Market
+// SQLite datasource (see prisma.config.ts for the runtime connection url)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String
+  image       String
+  position    Int       @default(0)
+  products    Product[]
+}
+
+model Brand {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  logo     String
+  products Product[]
+}
+
+model Product {
+  id               String        @id @default(cuid())
+  slug             String        @unique
+  name             String
+  shortDescription String
+  description      String
+  price            Int
+  compareAtPrice   Int?
+  stock             Int          @default(0)
+  // Comma-separated tags, e.g. "vegano,sin-tacc,sin-azucar" (SQLite has no native list type in Prisma)
+  tags             String        @default("")
+  featured         Boolean       @default(false)
+  isNew            Boolean       @default(false)
+  isBestSeller     Boolean       @default(false)
+  nutritionFacts   String? // JSON-encoded string: { serving, calories, protein, carbs, fat, ... }
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  brand      Brand    @relation(fields: [brandId], references: [id])
+  brandId    String
+
+  images     ProductImage[]
+  reviews    Review[]
+  orderItems OrderItem[]
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  url       String
+  alt       String
+  position  Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  authorName String
+  rating     Int
+  comment    String
+  createdAt  DateTime @default(now())
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  String
+}
+
+model Order {
+  id     String @id @default(cuid())
+  // status: pending | paid | fulfilled | cancelled
+  status String @default("pending")
+  // fulfillment: delivery | pickup
+  fulfillment String
+
+  customerName  String
+  customerEmail String
+  customerPhone String
+  address       String?
+  city          String?
+  notes         String?
+
+  subtotal Int
+  shipping Int    @default(0)
+  total    Int
+
+  mpPreferenceId String?
+  mpPaymentId    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  name     String
+  price    Int
+  quantity Int
+  subtotal Int
+
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+}
