@@ -38,6 +38,81 @@ const REAL_PRODUCT_IMAGES: Record<string, string[]> = {
   "castana-de-caju-tostada-y-salada": [
     "https://acdn-us.mitiendanube.com/stores/001/918/710/products/07-castanas-tostadas-saladas1-11a0a1aaf62aebca5716354554727896-640-0.webp",
   ],
+  "almendras-non-pareil": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/almendra-nom-pareil-50d4bae4d3b1fa655616982389570154-640-0.webp",
+  ],
+  "mani-tostado-salado": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/mani-repelado-a10c5e2e1b24fe369916982384859550-640-0.webp",
+  ],
+  "mani-tostado-sin-sal": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/mani-repelado-2b3d78a09d5914047816982385249393-640-0.webp",
+  ],
+  "mix-de-frutas-secas-con-pasas": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/mix-tradicional-3-c1e94fe48063e27ad116982850016022-640-0.webp",
+  ],
+  "mix-de-frutas-secas-sin-pasas": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/tienda-nube-mix-frutos-secos-01c00968a902665b0317303835346164-640-0.webp",
+  ],
+  "mix-de-frutas-secas-tropical": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/mix-tropical-1-025b89d2dcb7ac3bd116982668211505-640-0.webp",
+  ],
+  "nuez-mariposa": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/nuez-mariposa-8e163b1adcc7e9558c169823865392731-d14f8a2d922fa0772f16982386622828-640-0.webp",
+  ],
+  "lenteja-nacional": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/lenteja-nacional-1-06df4f29f7233283a516982445833499-640-0.webp",
+  ],
+  "lenteja-turca": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/lenteja-turca-1-6a04742bbc0bb5d11616982443794065-640-0.webp",
+  ],
+  "cacao-amargo": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/cacao-alcalino-1-8d0768f08ef9a6280b16982615115398-640-0.webp",
+  ],
+  "harina-de-coco": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/harina-de-coco1-7328b5ff10033b68af16859845379984-640-0.webp",
+  ],
+  "sal-himalaya-gruesa": [
+    "https://acdn-us.mitiendanube.com/stores/003/951/921/products/sal-rosa-gruesa-904c3a9a54834ec9a517540910356737-640-0.webp",
+  ],
+  "semilla-de-lino": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/lino-1-f91ad970b57ee327ab16982408538655-640-0.webp",
+  ],
+  "semilla-de-quinoa-blanca": [
+    "https://acdn-us.mitiendanube.com/stores/914/913/products/4040241-b8fb0725a34127699115447248653867-640-0.webp",
+  ],
+  "semilla-de-sesamo-integral": [
+    "https://acdn-us.mitiendanube.com/stores/001/367/092/products/semillas-de-sesamo-integral-011-2a4b879c9658336fe116866684922665-640-0.webp",
+  ],
+  "semilla-de-zapallo": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/zapallo-1-830725e5ecf5e714b416982410982341-640-0.webp",
+  ],
+  "semilla-de-chia": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/chia-1-cdad9d83184b187a9e16982409586973-640-0.webp",
+  ],
+  "maiz-frito-mostaza-y-miel": [
+    "https://acdn-us.mitiendanube.com/stores/001/021/255/products/snacks-maiz-frito11-c1ba5d188cc8d0fdca15646353963174-640-0.webp",
+  ],
+  "coco-en-escamas": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/coco-en-escamas-e29ba295ae73a563f117311724232939-640-0.webp",
+  ],
+  "coco-rallado": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/coco-rallado-1-5531b41793a0b0b4ef16982616979756-640-0.webp",
+  ],
+  "arroz-yamani-integral": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/arroz-yamani-1-9f3bf7d88f094b356616982450229715-640-0.webp",
+  ],
+  "avena-instantanea": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/avena-instantanea-1-f7e78280ef86a4282f16982618415322-640-0.webp",
+  ],
+  "avena-tradicional": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/avena-tradicional-1-469d79ae4fc0e64e5016982618674017-640-0.webp",
+  ],
+  "chips-de-banana": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/banana-chips-9907da617c354ccf7e16982392505686-640-0.webp",
+  ],
+  "datiles-argelia-sin-carozo": [
+    "https://cdn.newgarden.com.ar/media/catalog/product/cache/2c6bb79cdc244165cc50f4324466eb9d/d/a/datil-deglet-3_1.jpg",
+  ],
 };
 
 type CategorySeed = {
