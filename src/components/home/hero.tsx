@@ -24,8 +24,9 @@ export function Hero() {
 
           <Reveal delay={160}>
             <p className="max-w-md font-sans text-lg leading-relaxed text-olive-700/90">
-              Suplementos, proteínas y alimentos naturales elegidos con el
-              mismo estándar con el que entrenás: sin atajos, sin relleno.
+              Alimentos naturales, productos gourmet y suplementos deportivos
+              elegidos con el mismo estándar con el que entrenás: sin atajos,
+              sin relleno.
             </p>
           </Reveal>
 

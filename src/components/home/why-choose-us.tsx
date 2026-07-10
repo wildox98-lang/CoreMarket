@@ -30,7 +30,7 @@ const REASONS = [
     icon: ChatCircleDots,
     title: "Asesoramiento real",
     description:
-      "Nuestro equipo entrena y prueba lo que vende. Escribinos por WhatsApp si tenés dudas sobre qué elegir.",
+      "Nuestro equipo prueba lo que vende. Escribinos por WhatsApp si tenés dudas sobre qué elegir.",
   },
 ];
 

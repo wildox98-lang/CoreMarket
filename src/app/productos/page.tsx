@@ -7,7 +7,7 @@ import { getCategories, getBrands, getFilteredProducts } from "@/lib/queries";
 export const metadata: Metadata = {
   title: "Productos",
   description:
-    "Suplementos, proteínas, superalimentos y snacks saludables. Filtrá por categoría, marca o precio.",
+    "Gourmet, congelados, snacks, granolas, suplementos deportivos y mucho más. Filtrá por categoría, marca o precio.",
 };
 
 type SearchParams = Record<string, string | string[] | undefined>;

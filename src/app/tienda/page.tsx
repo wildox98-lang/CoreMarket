@@ -11,19 +11,19 @@ export const metadata: Metadata = {
 
 const HIGHLIGHTS = [
   {
-    photo: 19,
+    photo: 53,
     title: "Góndola de suplementos",
-    description: "Proteínas, creatina y aminoácidos organizados por objetivo, con etiquetas claras.",
+    description: "Proteínas, creatina y suplementos organizados por objetivo, con etiquetas claras.",
   },
   {
-    photo: 102,
-    title: "Heladera de frescos",
-    description: "Snacks, barritas y preparaciones caseras que renovamos toda la semana.",
+    photo: 62,
+    title: "Heladera de congelados",
+    description: "Helados, panificados y preparaciones congeladas que renovamos toda la semana.",
   },
   {
-    photo: 25,
-    title: "Rincón de bienestar",
-    description: "Tés, adaptógenos y aceites para quienes buscan algo más que rendimiento físico.",
+    photo: 63,
+    title: "Rincón gourmet y almacén",
+    description: "Salsas, condimentos, granolas y productos de despensa para tu día a día.",
   },
 ];
 

@@ -81,8 +81,8 @@ export default async function Home() {
         <SectionHeader
           eyebrow="Alimentación real"
           title="Comida de verdad, sin vueltas"
-          description="Superalimentos, frutos secos y snacks pensados para acompañar tu día, no solo tu entrenamiento."
-          href="/productos?categoria=superalimentos"
+          description="Semillas, legumbres, frutos secos y granolas pensados para acompañar tu día, no solo tu entrenamiento."
+          href="/productos"
         />
         <div className="mt-10">
           <ProductGrid products={healthyFoods} />

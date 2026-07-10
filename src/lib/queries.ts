@@ -102,10 +102,10 @@ export async function getPromotions(take = 8) {
 }
 
 const HEALTHY_FOOD_CATEGORIES = [
-  "superalimentos",
-  "frutos-secos-semillas",
-  "snacks-saludables",
-  "bienestar-natural",
+  "semillas-legumbres-harinas",
+  "frutos-secos",
+  "granolas",
+  "endulzantes",
 ];
 
 export async function getHealthyFoodProducts(take = 8) {

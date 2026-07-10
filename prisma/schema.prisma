@@ -30,6 +30,7 @@ model Brand {
 
 model Product {
   id               String        @id @default(cuid())
+  sku              String?       @unique
   slug             String        @unique
   name             String
   shortDescription String
@@ -37,7 +38,7 @@ model Product {
   price            Int
   compareAtPrice   Int?
   stock             Int          @default(0)
-  // Comma-separated tags, e.g. "vegano,sin-tacc,sin-azucar" (SQLite has no native list type in Prisma)
+  // Comma-separated tags, e.g. "vegano,sin-tacc,sin-azucar"
   tags             String        @default("")
   featured         Boolean       @default(false)
   isNew            Boolean       @default(false)

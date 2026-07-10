@@ -21,15 +21,15 @@ const workSans = Work_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://coremarket.com.ar"),
   title: {
-    default: "Core Market — Nutrición real para tu rendimiento",
+    default: "Core Market — Alimentación natural y suplementos en Belgrano",
     template: "%s | Core Market",
   },
   description:
-    "Suplementos deportivos, proteínas, superalimentos y productos naturales en Belgrano, Buenos Aires. Retiro en tienda o envío a todo CABA.",
+    "Almacén naturista con gourmet, congelados, snacks, granolas, suplementos deportivos y mucho más en Belgrano, Buenos Aires. Retiro en tienda o envío a todo CABA.",
   openGraph: {
     title: "Core Market",
     description:
-      "Suplementos deportivos, proteínas, superalimentos y productos naturales en Buenos Aires.",
+      "Almacén naturista con gourmet, congelados, snacks y suplementos deportivos en Buenos Aires.",
     locale: "es_AR",
     type: "website",
   },
