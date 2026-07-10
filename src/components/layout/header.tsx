@@ -40,7 +40,7 @@ export default function Header() {
           <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-6 py-2 text-xs tracking-wide">
             <span>{STORE.deliveryZoneNote}</span>
             <span className="opacity-50">·</span>
-            <span>Retirá gratis en Belgrano</span>
+            <span>Retirá gratis en el local</span>
           </div>
         </div>
 

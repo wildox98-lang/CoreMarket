@@ -11,7 +11,7 @@ export function Hero() {
         <div className="flex flex-col gap-7">
           <Reveal>
             <span className="inline-flex items-center gap-2 rounded-full border border-olive-700/30 px-4 py-1.5 font-sans text-xs font-semibold uppercase tracking-[0.2em] text-olive-700">
-              Belgrano · Buenos Aires
+              CABA · Buenos Aires
             </span>
           </Reveal>
 

@@ -10,7 +10,7 @@ export function AboutTeaser() {
         <Reveal className="relative order-2 aspect-[4/3] overflow-hidden rounded-card lg:order-1">
           <Image
             src="https://picsum.photos/id/76/1000/750"
-            alt="El local de Core Market en Belgrano"
+            alt="El local de Core Market en Buenos Aires"
             fill
             sizes="(max-width: 1024px) 90vw, 45vw"
             className="object-cover"
@@ -29,7 +29,7 @@ export function AboutTeaser() {
           </Reveal>
           <Reveal delay={140}>
             <p className="font-sans text-base leading-relaxed text-olive-700/90">
-              Core Market nació en 2016 en Belgrano de una idea simple: en
+              Core Market nació en 2016 en Buenos Aires de una idea simple: en
               Buenos Aires no había un lugar donde el mundo del entrenamiento
               y el de la alimentación natural convivieran sin resignar
               calidad. Hoy seguimos probando cada producto antes de subirlo a

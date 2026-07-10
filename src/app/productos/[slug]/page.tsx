@@ -170,7 +170,7 @@ export default async function ProductPage({
             </p>
             <p className="flex items-center gap-2.5">
               <Storefront size={18} className="shrink-0 text-gold-dark" />
-              Retiro gratis en nuestro local de Belgrano.
+              Retiro gratis en nuestro local.
             </p>
           </div>
         </div>

@@ -1,18 +1,19 @@
-// Placeholder store details — replace with the real values before launch.
 export const STORE = {
   name: "Core Market",
   legalCity: "Buenos Aires, Argentina",
-  address: "Av. Cabildo 2140, Belgrano, CABA",
-  neighborhood: "Belgrano",
-  mapsUrl: "https://maps.google.com/?q=Av.+Cabildo+2140,+Buenos+Aires",
-  whatsapp: "5491100000000", // digits only, country + area code, no symbols
-  whatsappDisplay: "+54 9 11 0000-0000",
-  instagram: "https://instagram.com/coremarket.ar",
-  instagramHandle: "@coremarket.ar",
+  address: "Estado de Palestina 696, C1195 Buenos Aires, CABA, Argentina",
+  neighborhood: "CABA",
+  mapsUrl:
+    "https://maps.google.com/?q=Estado+de+Palestina+696,+C1195+Buenos+Aires,+CABA,+Argentina",
+  whatsapp: "5491130096750", // digits only, country + area code, no symbols
+  whatsappDisplay: "+54 9 11 3009-6750",
+  instagram: "https://www.instagram.com/coremarket.ba/",
+  instagramHandle: "@coremarket.ba",
   email: "hola@coremarket.com.ar",
   hours: [
     { days: "Lunes a viernes", hours: "9:00 – 20:00" },
-    { days: "Sábados", hours: "9:00 – 14:00" },
+    { days: "Sábados", hours: "9:00 – 17:00" },
+    { days: "Domingos", hours: "Cerrado" },
   ],
   freeShippingThreshold: 60000,
   deliveryFee: 4500,

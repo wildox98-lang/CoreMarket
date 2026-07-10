@@ -20,7 +20,7 @@ const TESTIMONIALS = [
     name: "Delfina Acosta",
     role: "Alimentación consciente",
     quote:
-      "Encontré superalimentos y snacks que no estaban en ningún lado de Belgrano. Además, el local tiene una onda hermosa.",
+      "Encontré superalimentos y snacks que no estaban en ningún lado. Además, el local tiene una onda hermosa.",
   },
   {
     name: "Gonzalo Ibáñez",

@@ -21,10 +21,10 @@ export default async function Footer() {
     <footer className="bg-olive-900 text-cream">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
-          <Logo className="text-cream" markClassName="text-gold" />
+          <Logo className="text-cream" />
           <p className="max-w-xs font-sans text-sm leading-relaxed text-cream/70">
             Nutrición real para quienes entrenan fuerte y comen bien. Desde
-            Belgrano para todo Buenos Aires.
+            Buenos Aires para todo CABA y el GBA.
           </p>
           <div className="flex items-center gap-3 pt-1">
             <a

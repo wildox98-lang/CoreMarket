@@ -21,11 +21,11 @@ const workSans = Work_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://coremarket.com.ar"),
   title: {
-    default: "Core Market — Alimentación natural y suplementos en Belgrano",
+    default: "Core Market — Alimentación natural y suplementos en Buenos Aires",
     template: "%s | Core Market",
   },
   description:
-    "Almacén naturista con gourmet, congelados, snacks, granolas, suplementos deportivos y mucho más en Belgrano, Buenos Aires. Retiro en tienda o envío a todo CABA.",
+    "Almacén naturista con gourmet, congelados, snacks, granolas, suplementos deportivos y mucho más en Buenos Aires. Retiro en tienda o envío a todo CABA.",
   openGraph: {
     title: "Core Market",
     description:
@@ -49,6 +49,20 @@ const jsonLd = {
     addressRegion: "Buenos Aires",
     addressCountry: "AR",
   },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "20:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Saturday"],
+      opens: "09:00",
+      closes: "17:00",
+    },
+  ],
   sameAs: [STORE.instagram],
 };
 

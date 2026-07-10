@@ -1,7 +1,7 @@
 # Core Market
 
-Premium e-commerce site for Core Market, a sports-supplement and natural-food
-store in Belgrano, Buenos Aires. Next.js 16 (App Router), Tailwind CSS v4,
+Premium e-commerce site for Core Market, a natural-food and sports-supplement
+store in Buenos Aires. Next.js 16 (App Router), Tailwind CSS v4,
 Prisma + PostgreSQL, Zustand, and Mercado Pago Checkout Pro.
 
 ## Getting started
@@ -43,9 +43,8 @@ Open [http://localhost:3000](http://localhost:3000).
 - **Images**: seeded content uses `picsum.photos` (real stock photography,
   curated by hand for a consistent editorial mood) as a placeholder — swap
   for real product photography before launch.
-- **Content**: store address, WhatsApp number, and Instagram handle in
-  `src/lib/constants.ts` are placeholders and should be replaced with the
-  real values.
+- **Content**: store address, WhatsApp number, and Instagram handle live in
+  `src/lib/constants.ts`.
 
 ## Scripts
 

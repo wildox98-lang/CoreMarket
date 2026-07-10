@@ -6,7 +6,7 @@ import { StoreLocation } from "@/components/home/store-location";
 
 export const metadata: Metadata = {
   title: "La Tienda",
-  description: "Conocé nuestro local en Belgrano: dirección, horarios y qué vas a encontrar.",
+  description: "Conocé nuestro local: dirección, horarios y qué vas a encontrar.",
 };
 
 const HIGHLIGHTS = [
@@ -34,7 +34,7 @@ export default function TiendaPage() {
         <div className="relative h-[50vh] min-h-[360px] w-full overflow-hidden">
           <Image
             src="https://picsum.photos/id/116/1600/900"
-            alt="El local de Core Market en Belgrano"
+            alt="El local de Core Market en Buenos Aires"
             fill
             priority
             sizes="100vw"
@@ -44,7 +44,7 @@ export default function TiendaPage() {
         </div>
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center text-cream">
           <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em]">
-            Belgrano · Buenos Aires
+            CABA · Buenos Aires
           </span>
           <h1 className="font-display text-4xl font-medium sm:text-5xl">La tienda</h1>
         </div>

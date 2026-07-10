@@ -2,7 +2,7 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { Reveal } from "@/components/ui/reveal";
 
 const STATS = [
-  { value: 2500, suffix: "+", label: "Clientes en Belgrano" },
+  { value: 2500, suffix: "+", label: "Clientes en Buenos Aires" },
   { value: 300, suffix: "+", label: "Productos naturales" },
   { value: 2016, suffix: "", label: "Abrimos nuestras puertas" },
   { value: 48, suffix: "hs", label: "Entrega en CABA" },

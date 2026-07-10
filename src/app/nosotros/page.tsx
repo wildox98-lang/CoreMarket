@@ -9,7 +9,7 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
 export const metadata: Metadata = {
   title: "Nosotros",
   description:
-    "La historia de Core Market: un almacén de barrio en Belgrano con estándar de alto rendimiento, desde 2016.",
+    "La historia de Core Market: un almacén de barrio en Buenos Aires con estándar de alto rendimiento, desde 2016.",
 };
 
 const VALUES = [
@@ -53,7 +53,7 @@ export default function NosotrosPage() {
             </Reveal>
             <Reveal delay={140}>
               <p className="font-sans text-base leading-relaxed text-olive-700/90">
-                Core Market nació en 2016 en Belgrano de una idea simple: en
+                Core Market nació en 2016 en Buenos Aires de una idea simple: en
                 Buenos Aires no había un lugar donde el mundo del entrenamiento
                 y el de la alimentación natural convivieran sin resignar
                 calidad. Del otro lado del mostrador, atletas y curiosos de la
@@ -75,7 +75,7 @@ export default function NosotrosPage() {
             <div className="relative aspect-[4/5] overflow-hidden rounded-card shadow-lift">
               <Image
                 src="https://picsum.photos/id/76/1000/1250"
-                alt="El local de Core Market en Belgrano"
+                alt="El local de Core Market en Buenos Aires"
                 fill
                 sizes="(max-width: 1024px) 90vw, 45vw"
                 className="object-cover"
@@ -92,7 +92,7 @@ export default function NosotrosPage() {
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 py-14 sm:grid-cols-4">
           {[
             { value: 2016, label: "Abrimos nuestras puertas" },
-            { value: 2500, suffix: "+", label: "Clientes en Belgrano" },
+            { value: 2500, suffix: "+", label: "Clientes en Buenos Aires" },
             { value: 300, suffix: "+", label: "Productos naturales" },
             { value: 5, suffix: "", label: "Personas en el equipo" },
           ].map((stat, i) => (
@@ -137,7 +137,7 @@ export default function NosotrosPage() {
             ¿Querés conocernos en persona?
           </h2>
           <p className="max-w-md font-sans text-sm text-cream/75">
-            Te esperamos en Belgrano para asesorarte sin apuro y contarte por
+            Te esperamos en nuestro local para asesorarte sin apuro y contarte por
             qué elegimos cada producto de nuestro catálogo.
           </p>
           <Link

@@ -9,7 +9,7 @@ export function StoreLocation() {
       <div className="mx-auto max-w-7xl px-6 py-20">
         <SectionHeader
           eyebrow="Visitanos"
-          title="Te esperamos en Belgrano"
+          title="Te esperamos en nuestro local"
           description="Retirá tu pedido sin costo, recibí asesoramiento en persona o simplemente vení a conocernos."
         />
 

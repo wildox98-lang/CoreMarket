@@ -1,12 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Mark } from "./mark";
 
 export function Logo({
   className,
-  markClassName = "text-olive-700",
+  imgClassName = "h-9 w-9",
 }: {
   className?: string;
-  markClassName?: string;
+  imgClassName?: string;
 }) {
   return (
     <Link
@@ -14,8 +14,12 @@ export function Logo({
       className={`group inline-flex items-center gap-2.5 ${className ?? "text-olive-900"}`}
       aria-label="Core Market — inicio"
     >
-      <Mark
-        className={`h-7 w-7 shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 ${markClassName}`}
+      <Image
+        src="/logo.png"
+        alt=""
+        width={96}
+        height={96}
+        className={`shrink-0 rounded-full transition-transform duration-300 group-hover:-translate-y-0.5 ${imgClassName}`}
       />
       <span className="font-display text-[1.35rem] leading-none tracking-tight">
         <span className="italic font-medium">Core</span>{" "}
