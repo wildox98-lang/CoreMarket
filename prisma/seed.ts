@@ -652,9 +652,36 @@ async function main() {
     count++;
   }
 
-  await db.category.deleteMany({
-    where: { slug: { notIn: categories.map((c) => c.slug) } },
+  // Clean up leftover products from earlier demo catalogs (pre-real-catalog
+  // seeds). Only remove ones with no order history, so we never touch data
+  // tied to a real purchase.
+  await db.product.deleteMany({
+    where: {
+      slug: { notIn: REAL_PRODUCTS.map((p) => p.slug) },
+      orderItems: { none: {} },
+    },
   });
+
+  await db.brand.deleteMany({
+    where: {
+      slug: { notIn: REAL_BRANDS.map((b) => b.slug) },
+      products: { none: {} },
+    },
+  });
+
+  // Only delete categories left with zero products — if a demo product with
+  // real order history is still holding one, leave it in place instead of
+  // failing the whole deploy.
+  const staleCategories = await db.category.findMany({
+    where: { slug: { notIn: categories.map((c) => c.slug) } },
+    select: { id: true, _count: { select: { products: true } } },
+  });
+  const deletableCategoryIds = staleCategories
+    .filter((c) => c._count.products === 0)
+    .map((c) => c.id);
+  if (deletableCategoryIds.length > 0) {
+    await db.category.deleteMany({ where: { id: { in: deletableCategoryIds } } });
+  }
 
   console.log(
     `Listo: ${categories.length} categorías, ${REAL_BRANDS.length} marcas, ${count} productos.`,
