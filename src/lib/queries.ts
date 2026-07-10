@@ -102,10 +102,8 @@ export async function getPromotions(take = 8) {
 }
 
 const HEALTHY_FOOD_CATEGORIES = [
-  "semillas-legumbres-harinas",
-  "frutos-secos",
-  "granolas",
-  "endulzantes",
+  "semillas-frutos-secos-cereales",
+  "endulzantes-y-dulces",
 ];
 
 export async function getHealthyFoodProducts(take = 8) {
