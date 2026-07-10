@@ -25,6 +25,21 @@ const CATEGORY_PHOTOS: Record<string, [number, number]> = {
   "endulzantes-y-dulces": [102, 106],
 };
 
+// Real product photos, sourced from actual Argentine dietética/retailer
+// listings and verified by eye against the product name before being added
+// here. Slugs not listed here fall back to the category mood image.
+const REAL_PRODUCT_IMAGES: Record<string, string[]> = {
+  "avellanas-peladas-grandes": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/avellanas-21de3738512d1f5ec816982386067053-640-0.webp",
+  ],
+  "castanas-de-caju-natural": [
+    "https://acdn-us.mitiendanube.com/stores/002/324/020/products/castanas-caju-8886972d193ddf647216982386933967-640-0.webp",
+  ],
+  "castana-de-caju-tostada-y-salada": [
+    "https://acdn-us.mitiendanube.com/stores/001/918/710/products/07-castanas-tostadas-saladas1-11a0a1aaf62aebca5716354554727896-640-0.webp",
+  ],
+};
+
 type CategorySeed = {
   slug: string;
   name: string;
@@ -622,7 +637,10 @@ async function main() {
     const categoryName = categories.find((c) => c.slug === p.categorySlug)!.name;
     const featured = FEATURED_SLUGS.includes(p.slug);
 
-    const images = [0, 1].map((i) => img(CATEGORY_PHOTOS[p.categorySlug][i], p.name, i));
+    const realImages = REAL_PRODUCT_IMAGES[p.slug];
+    const images = realImages
+      ? realImages.map((url, i) => ({ url, alt: p.name, position: i }))
+      : [0, 1].map((i) => img(CATEGORY_PHOTOS[p.categorySlug][i], p.name, i));
 
     const sharedFields = {
       sku: p.sku,
