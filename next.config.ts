@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "granerorosario.com" },
       { protocol: "https", hostname: "pampavida.com" },
       { protocol: "https", hostname: "glutenfreemarket.com.ar" },
+      { protocol: "https", hostname: "www.aptomarket.com.ar" },
+      { protocol: "https", hostname: "happyfood.com.ar" },
+      { protocol: "https", hostname: "storage.googleapis.com" },
     ],
   },
 };
