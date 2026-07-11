@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "purafrutta.com" },
       { protocol: "https", hostname: "dieteticaviamonte.com.ar" },
       { protocol: "https", hostname: "toogood.com.ar" },
+      { protocol: "https", hostname: "acaciadietetica.com" },
+      { protocol: "https", hostname: "dicomere.com.ar" },
+      { protocol: "https", hostname: "yinyangargentina.com.ar" },
     ],
   },
 };
