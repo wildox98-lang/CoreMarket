@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "www.aptomarket.com.ar" },
       { protocol: "https", hostname: "happyfood.com.ar" },
       { protocol: "https", hostname: "storage.googleapis.com" },
+      { protocol: "https", hostname: "starnutrition.com.ar" },
+      { protocol: "https", hostname: "cdn.farmacialeloir.com.ar" },
+      { protocol: "https", hostname: "images.rappi.com.ar" },
+      { protocol: "https", hostname: "purafrutta.com" },
+      { protocol: "https", hostname: "dieteticaviamonte.com.ar" },
+      { protocol: "https", hostname: "toogood.com.ar" },
     ],
   },
 };
