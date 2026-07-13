@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "acaciadietetica.com" },
       { protocol: "https", hostname: "dicomere.com.ar" },
       { protocol: "https", hostname: "yinyangargentina.com.ar" },
+      { protocol: "https", hostname: "hegonatural.com" },
+      { protocol: "https", hostname: "frutosare.com.ar" },
+      { protocol: "https", hostname: "www.enasport.com" },
+      { protocol: "https", hostname: "www.demusculos.com" },
+      { protocol: "https", hostname: "wakomercadonatural.com" },
     ],
   },
 };
