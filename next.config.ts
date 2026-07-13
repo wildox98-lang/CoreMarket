@@ -33,6 +33,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "www.enasport.com" },
       { protocol: "https", hostname: "www.demusculos.com" },
       { protocol: "https", hostname: "wakomercadonatural.com" },
+      { protocol: "https", hostname: "cdn11.bigcommerce.com" },
+      { protocol: "https", hostname: "laduvalina.com.ar" },
     ],
   },
 };
