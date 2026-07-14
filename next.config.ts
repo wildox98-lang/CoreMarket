@@ -39,6 +39,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.fravega.com" },
       { protocol: "https", hostname: "burganas.com.ar" },
       { protocol: "https", hostname: "kibou.com.ar" },
+      { protocol: "https", hostname: "conosud-sa.com.ar" },
+      { protocol: "https", hostname: "feliceslasvacas.com" },
     ],
   },
 };
