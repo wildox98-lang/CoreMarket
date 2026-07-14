@@ -17,12 +17,12 @@ export const FAQ_ITEMS = [
   {
     question: "¿Los productos tienen fecha de vencimiento vigente?",
     answer:
-      "Sí, controlamos el stock semanalmente y solo vendemos productos con al menos 6 meses de vigencia al momento de la entrega.",
+      "Sí, controlamos el stock semanalmente para asegurarnos de que todo lo que vendemos tenga la fecha de vencimiento vigente.",
   },
   {
     question: "¿Puedo cambiar o devolver un producto?",
     answer:
-      "Si el producto está sin abrir y con su envase original, podés cambiarlo dentro de los 10 días de la compra. Escribinos por WhatsApp para coordinarlo.",
+      "Si el producto llegó en mal estado, dañado o no es el que pediste, lo cambiamos sin problema — escribinos por WhatsApp apenas lo recibís. Al ser un almacén y dietética, no hacemos cambios por arrepentimiento una vez entregado el pedido.",
   },
   {
     question: "¿Ofrecen asesoramiento sobre qué suplemento elegir?",
@@ -32,6 +32,6 @@ export const FAQ_ITEMS = [
   {
     question: "¿Tienen opciones sin TACC o veganas?",
     answer:
-      "Sí, marcamos cada producto con sus atributos (sin TACC, vegano, sin azúcar, etc.) para que puedas filtrar fácilmente en el catálogo.",
+      "Sí, tenemos varias opciones sin TACC, veganas, sin azúcar y otras variantes. Esos atributos vienen indicados por cada marca en su propio envase — nosotros no los certificamos, pero podés filtrarlos fácil en el catálogo según lo que declara cada producto.",
   },
 ] as const;
