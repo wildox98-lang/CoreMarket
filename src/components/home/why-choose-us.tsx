@@ -12,7 +12,7 @@ const REASONS = [
     icon: ShieldCheck,
     title: "Calidad verificada",
     description:
-      "Cada producto pasa por nuestro control antes de llegar a la góndola. Sin marcas truchas, sin vencidos.",
+      "Elegimos con cuidado cada marca que llega al local y revisamos vencimientos antes de ponerla en la góndola. Nada de productos truchos, nada vencido.",
   },
   {
     icon: Leaf,
