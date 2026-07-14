@@ -37,6 +37,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "laduvalina.com.ar" },
       { protocol: "https", hostname: "aldeaecologica.com.ar" },
       { protocol: "https", hostname: "images.fravega.com" },
+      { protocol: "https", hostname: "burganas.com.ar" },
+      { protocol: "https", hostname: "kibou.com.ar" },
     ],
   },
 };
