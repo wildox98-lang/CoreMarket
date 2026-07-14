@@ -41,6 +41,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "kibou.com.ar" },
       { protocol: "https", hostname: "conosud-sa.com.ar" },
       { protocol: "https", hostname: "feliceslasvacas.com" },
+      { protocol: "https", hostname: "karinat.com.ar" },
+      { protocol: "https", hostname: "i0.wp.com" },
     ],
   },
 };
