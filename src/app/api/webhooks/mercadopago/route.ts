@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Payment, WebhookSignatureValidator, InvalidWebhookSignatureError } from "mercadopago";
 import { db } from "@/lib/db";
 import { getMercadoPagoConfig, isMercadoPagoConfigured } from "@/lib/mercadopago";
+import { createTiendaNubeOrder, isTiendaNubeConfigured } from "@/lib/tiendanube";
 
 const STATUS_MAP: Record<string, string> = {
   approved: "paid",
@@ -45,10 +46,23 @@ export async function POST(request: Request) {
   const nextStatus = payment.status ? STATUS_MAP[payment.status] : undefined;
 
   if (orderId && nextStatus) {
-    await db.order.update({
+    const order = await db.order.update({
       where: { id: orderId },
       data: { status: nextStatus, mpPaymentId: String(payment.id) },
+      include: { items: { include: { product: true } } },
     });
+
+    if (nextStatus === "paid" && !order.tiendaNubeOrderId && isTiendaNubeConfigured()) {
+      try {
+        const tnOrder = await createTiendaNubeOrder(order);
+        await db.order.update({
+          where: { id: order.id },
+          data: { tiendaNubeOrderId: String(tnOrder.id) },
+        });
+      } catch (error) {
+        console.error("No se pudo replicar el pedido en TiendaNube", error);
+      }
+    }
   }
 
   return NextResponse.json({ received: true });
