@@ -10,6 +10,10 @@ export default defineConfig({
     seed: "npx tsx prisma/seed.ts",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // Migrations need a direct (non-pgbouncer) connection: pooled connections
+    // don't reliably hold the advisory lock Prisma Migrate uses, which causes
+    // "P1002: timed out trying to acquire a postgres advisory lock". The app
+    // itself (src/lib/db.ts, prisma/seed.ts) keeps using the pooled DATABASE_URL.
+    url: process.env["DATABASE_URL_UNPOOLED"] ?? process.env["DATABASE_URL"],
   },
 });
