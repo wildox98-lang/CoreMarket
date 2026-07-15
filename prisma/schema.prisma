@@ -29,23 +29,25 @@ model Brand {
 }
 
 model Product {
-  id               String        @id @default(cuid())
-  sku              String?       @unique
-  slug             String        @unique
-  name             String
-  shortDescription String
-  description      String
-  price            Int
-  compareAtPrice   Int?
-  stock             Int          @default(0)
+  id                  String   @id @default(cuid())
+  sku                 String?  @unique
+  slug                String   @unique
+  name                String
+  shortDescription    String
+  description         String
+  price               Int
+  compareAtPrice      Int?
+  stock               Int      @default(0)
   // Comma-separated tags, e.g. "vegano,sin-tacc,sin-azucar"
-  tags             String        @default("")
-  featured         Boolean       @default(false)
-  isNew            Boolean       @default(false)
-  isBestSeller     Boolean       @default(false)
-  nutritionFacts   String? // JSON-encoded string: { serving, calories, protein, carbs, fat, ... }
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  tags                String   @default("")
+  featured            Boolean  @default(false)
+  isNew               Boolean  @default(false)
+  isBestSeller        Boolean  @default(false)
+  nutritionFacts      String? // JSON-encoded string: { serving, calories, protein, carbs, fat, ... }
+  tiendaNubeProductId Int?
+  tiendaNubeVariantId Int?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
@@ -77,9 +79,9 @@ model Review {
 }
 
 model Order {
-  id     String @id @default(cuid())
+  id          String @id @default(cuid())
   // status: pending | paid | fulfilled | cancelled
-  status String @default("pending")
+  status      String @default("pending")
   // fulfillment: delivery | pickup
   fulfillment String
 
@@ -91,7 +93,7 @@ model Order {
   notes         String?
 
   subtotal Int
-  shipping Int    @default(0)
+  shipping Int @default(0)
   total    Int
 
   mpPreferenceId String?
