@@ -64,7 +64,12 @@ export async function POST(request: Request) {
           data: { tiendaNubeOrderId: String(tnOrder.id) },
         });
       } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
         console.error("No se pudo replicar el pedido en TiendaNube", error);
+        await db.order.update({
+          where: { id: order.id },
+          data: { tiendaNubeSyncError: message.slice(0, 2000) },
+        });
       }
     }
 
