@@ -62,7 +62,7 @@ export async function createTiendaNubeOrder(order: {
     first_name,
     last_name,
     address: order.address ?? "No informado",
-    number: "S/N",
+    number: "0",
     city: order.city ?? "No informado",
     province: "No informado",
     zipcode: "0000",
