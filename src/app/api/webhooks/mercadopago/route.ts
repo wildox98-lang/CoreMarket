@@ -3,6 +3,7 @@ import { Payment, WebhookSignatureValidator, InvalidWebhookSignatureError } from
 import { db } from "@/lib/db";
 import { getMercadoPagoConfig, isMercadoPagoConfigured } from "@/lib/mercadopago";
 import { createTiendaNubeOrder, isTiendaNubeConfigured } from "@/lib/tiendanube";
+import { sendOwnerOrderNotification, isEmailConfigured } from "@/lib/email";
 
 const STATUS_MAP: Record<string, string> = {
   approved: "paid",
@@ -46,13 +47,16 @@ export async function POST(request: Request) {
   const nextStatus = payment.status ? STATUS_MAP[payment.status] : undefined;
 
   if (orderId && nextStatus) {
+    const previous = await db.order.findUnique({ where: { id: orderId } });
     const order = await db.order.update({
       where: { id: orderId },
       data: { status: nextStatus, mpPaymentId: String(payment.id) },
       include: { items: { include: { product: true } } },
     });
 
-    if (nextStatus === "paid" && !order.tiendaNubeOrderId && isTiendaNubeConfigured()) {
+    const isFirstTimePaid = nextStatus === "paid" && previous?.status !== "paid";
+
+    if (isFirstTimePaid && !order.tiendaNubeOrderId && isTiendaNubeConfigured()) {
       try {
         const tnOrder = await createTiendaNubeOrder(order);
         await db.order.update({
@@ -61,6 +65,14 @@ export async function POST(request: Request) {
         });
       } catch (error) {
         console.error("No se pudo replicar el pedido en TiendaNube", error);
+      }
+    }
+
+    if (isFirstTimePaid && isEmailConfigured()) {
+      try {
+        await sendOwnerOrderNotification(order);
+      } catch (error) {
+        console.error("No se pudo enviar el email de aviso de pedido", error);
       }
     }
   }

@@ -10,6 +10,8 @@ export const STORE = {
   instagram: "https://www.instagram.com/coremarket.ba/",
   instagramHandle: "@coremarket.ba",
   email: "hola@coremarket.com.ar",
+  // Where "nuevo pedido pagado" notifications are sent (internal, not customer-facing).
+  notificationEmail: "micaelaliotti3@gmail.com",
   hours: [
     { days: "Lunes a viernes", hours: "9:00 – 20:00" },
     { days: "Sábados", hours: "9:00 – 17:00" },

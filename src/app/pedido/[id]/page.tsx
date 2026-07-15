@@ -52,10 +52,12 @@ export default async function OrderConfirmationPage({
           Pedido #{order.id.slice(-8)}
         </p>
 
-        {isPendingManual && (
+        {(isPendingManual || isPaid) && (
           <a
             href={buildWhatsappUrl(
-              `Hola! Quiero coordinar el pago de mi pedido #${order.id.slice(-8)}.`,
+              isPaid
+                ? `Hola! Ya pagué mi pedido #${order.id.slice(-8)}, quiero coordinar la ${order.fulfillment === "delivery" ? "entrega" : "el retiro"}.`
+                : `Hola! Quiero coordinar el pago de mi pedido #${order.id.slice(-8)}.`,
             )}
             target="_blank"
             rel="noopener noreferrer"
