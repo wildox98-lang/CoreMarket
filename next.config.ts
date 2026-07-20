@@ -43,6 +43,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "feliceslasvacas.com" },
       { protocol: "https", hostname: "karinat.com.ar" },
       { protocol: "https", hostname: "i0.wp.com" },
+      { protocol: "https", hostname: "cdn.batitienda.com" },
+      { protocol: "https", hostname: "mayoristadelegumbres.com.ar" },
+      { protocol: "https", hostname: "www.optimumnutrition.com" },
+      { protocol: "https", hostname: "cdn.contimarket.com" },
     ],
   },
 };
