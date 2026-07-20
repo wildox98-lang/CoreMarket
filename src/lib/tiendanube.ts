@@ -98,6 +98,7 @@ export async function createTiendaNubeOrder(order: {
 type TiendaNubeProductDetail = {
   id: number;
   variants: { id: number; price: string | null; stock: number | null; stock_management: boolean }[];
+  images: { id: number; src: string; position: number }[];
 };
 
 export async function getTiendaNubeProduct(productId: number) {
@@ -111,6 +112,39 @@ export function readVariantPriceStock(product: TiendaNubeProductDetail) {
   return {
     price: variant.price != null ? Math.round(parseFloat(variant.price)) : null,
     stock: variant.stock_management ? (variant.stock ?? 0) : null,
+  };
+}
+
+/** Returns TiendaNube's images sorted by position, or null if it has none yet (caller should keep the current photo). */
+export function readProductImages(product: TiendaNubeProductDetail) {
+  if (product.images.length === 0) return null;
+  return [...product.images]
+    .sort((a, b) => a.position - b.position)
+    .map((img) => img.src);
+}
+
+/**
+ * Builds a Prisma `Product.update` data object reflecting TiendaNube's
+ * current price/stock/images, so it can be applied identically from the
+ * one-time backfill and the product/updated webhook. Fields TiendaNube
+ * doesn't have an answer for yet (e.g. no images uploaded) are omitted
+ * rather than overwritten with something worse.
+ */
+export function buildLocalUpdateFromTiendaNube(product: TiendaNubeProductDetail, altText: string) {
+  const priceStock = readVariantPriceStock(product);
+  const images = readProductImages(product);
+
+  return {
+    ...(priceStock?.price != null ? { price: priceStock.price } : {}),
+    ...(priceStock?.stock != null ? { stock: priceStock.stock } : {}),
+    ...(images
+      ? {
+          images: {
+            deleteMany: {},
+            create: images.map((url, i) => ({ url, alt: altText, position: i })),
+          },
+        }
+      : {}),
   };
 }
 

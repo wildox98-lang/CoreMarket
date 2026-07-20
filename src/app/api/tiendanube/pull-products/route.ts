@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getTiendaNubeProduct, readVariantPriceStock, isTiendaNubeConfigured } from "@/lib/tiendanube";
+import { getTiendaNubeProduct, buildLocalUpdateFromTiendaNube, isTiendaNubeConfigured } from "@/lib/tiendanube";
 
 export const maxDuration = 60;
 
@@ -38,15 +38,9 @@ export async function POST(request: Request) {
   for (const product of pending) {
     try {
       const tnProduct = await getTiendaNubeProduct(product.tiendaNubeProductId!);
-      const values = readVariantPriceStock(tnProduct);
-      if (values) {
-        await db.product.update({
-          where: { id: product.id },
-          data: {
-            ...(values.price != null ? { price: values.price } : {}),
-            ...(values.stock != null ? { stock: values.stock } : {}),
-          },
-        });
+      const data = buildLocalUpdateFromTiendaNube(tnProduct, product.name);
+      if (Object.keys(data).length > 0) {
+        await db.product.update({ where: { id: product.id }, data });
       }
       results.push({ slug: product.slug, ok: true });
     } catch (error) {

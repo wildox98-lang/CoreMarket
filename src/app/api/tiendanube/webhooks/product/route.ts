@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getTiendaNubeProduct, readVariantPriceStock } from "@/lib/tiendanube";
+import { getTiendaNubeProduct, buildLocalUpdateFromTiendaNube } from "@/lib/tiendanube";
 
 function isValidSignature(rawBody: string, signature: string | null) {
   const secret = process.env.TIENDANUBE_CLIENT_SECRET;
@@ -27,15 +27,9 @@ export async function POST(request: Request) {
     const product = await db.product.findFirst({ where: { tiendaNubeProductId: payload.id } });
     if (product) {
       const tnProduct = await getTiendaNubeProduct(payload.id);
-      const values = readVariantPriceStock(tnProduct);
-      if (values) {
-        await db.product.update({
-          where: { id: product.id },
-          data: {
-            ...(values.price != null ? { price: values.price } : {}),
-            ...(values.stock != null ? { stock: values.stock } : {}),
-          },
-        });
+      const data = buildLocalUpdateFromTiendaNube(tnProduct, product.name);
+      if (Object.keys(data).length > 0) {
+        await db.product.update({ where: { id: product.id }, data });
       }
     }
   }

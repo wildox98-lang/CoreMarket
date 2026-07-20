@@ -1191,13 +1191,12 @@ async function main() {
 
     await db.product.upsert({
       where: { slug: p.slug },
-      // Price/stock are intentionally left out of `update`: once a product
-      // exists, TiendaNube is the source of truth for those two fields (see
-      // the pull-products backfill and the product/updated webhook), so
-      // reseeding must not overwrite them with the spreadsheet's static value.
+      // Price/stock/images are intentionally left out of `update`: once a
+      // product exists, TiendaNube is the source of truth for those fields
+      // (see the pull-products backfill and the product/updated webhook), so
+      // reseeding must not overwrite them with the spreadsheet/seed values.
       update: {
         ...sharedFields,
-        images: { deleteMany: {}, create: images },
       },
       create: {
         slug: p.slug,
