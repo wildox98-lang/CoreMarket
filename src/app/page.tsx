@@ -1,128 +1,46 @@
-import { Hero } from "@/components/home/hero";
-import { StatsBar } from "@/components/home/stats-bar";
-import { CategoriesGrid } from "@/components/home/categories-grid";
-import { SectionHeader } from "@/components/home/section-header";
+import Link from "next/link";
 import { ProductGrid } from "@/components/product/product-grid";
-import { ProductRail } from "@/components/home/product-rail";
-import { WhyChooseUs } from "@/components/home/why-choose-us";
-import { BrandsStrip } from "@/components/home/brands-strip";
-import { Testimonials } from "@/components/home/testimonials";
-import { AboutTeaser } from "@/components/home/about-teaser";
-import { StoreLocation } from "@/components/home/store-location";
-import { FaqTeaser } from "@/components/home/faq-teaser";
-import { InstagramSection } from "@/components/home/instagram-section";
-import { NewsletterBanner } from "@/components/home/newsletter-banner";
-import {
-  getBestSellers,
-  getBrands,
-  getCategories,
-  getFeaturedProducts,
-  getHealthyFoodProducts,
-  getNewArrivals,
-  getPromotions,
-} from "@/lib/queries";
+import { getCategories, getFilteredProducts } from "@/lib/queries";
 
 export default async function Home() {
-  const [
-    categories,
-    brands,
-    featured,
-    promotions,
-    healthyFoods,
-    bestSellers,
-    newArrivals,
-  ] = await Promise.all([
+  const [categories, result] = await Promise.all([
     getCategories(),
-    getBrands(),
-    getFeaturedProducts(4),
-    getPromotions(8),
-    getHealthyFoodProducts(8),
-    getBestSellers(8),
-    getNewArrivals(8),
+    getFilteredProducts({ page: 1 }),
   ]);
 
   return (
-    <>
-      <Hero />
-      <StatsBar />
-      <CategoriesGrid categories={categories} />
-
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <SectionHeader
-          eyebrow="Lo esencial"
-          title="Elegidos por nuestro equipo"
-          description="La selección de productos que más recomendamos, mes a mes, según nuestra propia experiencia entrenando."
+    <div className="mx-auto max-w-7xl px-6 py-10">
+      <nav
+        aria-label="Categorías"
+        className="-mx-6 mb-10 flex gap-3 overflow-x-auto px-6 pb-1"
+      >
+        <Link
           href="/productos"
-        />
-        <div className="mt-10">
-          <ProductGrid products={featured} />
-        </div>
-      </section>
+          className="shrink-0 rounded-full bg-olive-900 px-5 py-2.5 font-sans text-sm font-medium text-cream"
+        >
+          Todos los productos
+        </Link>
+        {categories.map((category) => (
+          <Link
+            key={category.slug}
+            href={`/productos?categoria=${category.slug}`}
+            className="shrink-0 rounded-full border border-border bg-cream px-5 py-2.5 font-sans text-sm font-medium text-olive-700 transition-colors hover:border-olive-700"
+          >
+            {category.name}
+          </Link>
+        ))}
+      </nav>
 
-      {promotions.length > 0 && (
-        <section className="bg-cream">
-          <div className="mx-auto max-w-7xl px-6 py-20">
-            <SectionHeader
-              eyebrow="Ofertas"
-              title="Ofertas de la semana"
-              description="Precios especiales por tiempo limitado, mientras dure el stock disponible."
-              href="/productos"
-            />
-            <div className="mt-10">
-              <ProductRail products={promotions} />
-            </div>
-          </div>
-        </section>
-      )}
+      <ProductGrid products={result.products} />
 
-      <WhyChooseUs />
-
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <SectionHeader
-          eyebrow="Alimentación real"
-          title="Comida de verdad, sin vueltas"
-          description="Semillas, legumbres, frutos secos y granolas pensados para acompañar tu día, no solo tu entrenamiento."
+      <div className="mt-14 flex justify-center">
+        <Link
           href="/productos"
-        />
-        <div className="mt-10">
-          <ProductGrid products={healthyFoods} />
-        </div>
-      </section>
-
-      <section className="bg-cream">
-        <div className="mx-auto max-w-7xl px-6 py-20">
-          <SectionHeader
-            eyebrow="Los más elegidos"
-            title="Lo que más se lleva la comunidad"
-            href="/productos"
-          />
-          <div className="mt-10">
-            <ProductRail products={bestSellers} />
-          </div>
-        </div>
-      </section>
-
-      <BrandsStrip brands={brands} />
-
-      {newArrivals.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 py-20">
-          <SectionHeader
-            eyebrow="Recién llegado"
-            title="Las últimas incorporaciones"
-            href="/productos"
-          />
-          <div className="mt-10">
-            <ProductGrid products={newArrivals} />
-          </div>
-        </section>
-      )}
-
-      <Testimonials />
-      <AboutTeaser />
-      <StoreLocation />
-      <FaqTeaser />
-      <InstagramSection />
-      <NewsletterBanner />
-    </>
+          className="cursor-pointer rounded-full border border-olive-700 px-8 py-3.5 font-sans text-sm font-semibold text-olive-700 transition-colors hover:bg-olive-700 hover:text-cream"
+        >
+          Ver todos los productos
+        </Link>
+      </div>
+    </div>
   );
 }

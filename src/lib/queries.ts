@@ -61,61 +61,6 @@ export function toProductCard(product: ProductWithCardData): ProductCard {
   };
 }
 
-export async function getFeaturedProducts(take = 4) {
-  const products = await db.product.findMany({
-    where: { featured: true },
-    include: productCardInclude,
-    take,
-    orderBy: { createdAt: "desc" },
-  });
-  return products.map(toProductCard);
-}
-
-export async function getBestSellers(take = 8) {
-  const products = await db.product.findMany({
-    where: { isBestSeller: true },
-    include: productCardInclude,
-    take,
-    orderBy: { createdAt: "desc" },
-  });
-  return products.map(toProductCard);
-}
-
-export async function getNewArrivals(take = 8) {
-  const products = await db.product.findMany({
-    where: { isNew: true },
-    include: productCardInclude,
-    take,
-    orderBy: { createdAt: "desc" },
-  });
-  return products.map(toProductCard);
-}
-
-export async function getPromotions(take = 8) {
-  const products = await db.product.findMany({
-    where: { compareAtPrice: { not: null } },
-    include: productCardInclude,
-    take,
-    orderBy: { createdAt: "desc" },
-  });
-  return products.map(toProductCard);
-}
-
-const HEALTHY_FOOD_CATEGORIES = [
-  "semillas-frutos-secos-cereales",
-  "endulzantes-y-dulces",
-];
-
-export async function getHealthyFoodProducts(take = 8) {
-  const products = await db.product.findMany({
-    where: { category: { slug: { in: HEALTHY_FOOD_CATEGORIES } } },
-    include: productCardInclude,
-    take,
-    orderBy: { createdAt: "desc" },
-  });
-  return products.map(toProductCard);
-}
-
 export async function getCategories() {
   return db.category.findMany({ orderBy: { position: "asc" } });
 }
