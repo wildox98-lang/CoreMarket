@@ -114,6 +114,28 @@ export function readVariantPriceStock(product: TiendaNubeProductDetail) {
   };
 }
 
+/** Returns the existing TiendaNube product for a SKU, or null if none has that SKU yet. */
+export async function findTiendaNubeProductBySku(sku: string) {
+  const accessToken = process.env.TIENDANUBE_ACCESS_TOKEN;
+  const storeId = process.env.TIENDANUBE_STORE_ID;
+  if (!accessToken || !storeId) {
+    throw new Error("TiendaNube no está configurado (falta TIENDANUBE_ACCESS_TOKEN o TIENDANUBE_STORE_ID)");
+  }
+
+  const response = await fetch(
+    `https://api.tiendanube.com/${API_VERSION}/${storeId}/products/sku/${encodeURIComponent(sku)}`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}`, "User-Agent": USER_AGENT },
+    },
+  );
+
+  if (response.status === 404) return null;
+  if (!response.ok) {
+    throw new Error(`TiendaNube API ${response.status}: ${await response.text()}`);
+  }
+  return response.json() as Promise<TiendaNubeProductDetail>;
+}
+
 export async function tiendaNubeFetch(path: string, init?: RequestInit) {
   const accessToken = process.env.TIENDANUBE_ACCESS_TOKEN;
   const storeId = process.env.TIENDANUBE_STORE_ID;

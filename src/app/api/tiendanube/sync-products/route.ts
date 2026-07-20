@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { tiendaNubeFetch, isTiendaNubeConfigured } from "@/lib/tiendanube";
+import { tiendaNubeFetch, findTiendaNubeProductBySku, isTiendaNubeConfigured } from "@/lib/tiendanube";
 
 export const maxDuration = 60;
 
@@ -32,36 +32,42 @@ export async function POST(request: Request) {
     take: limit,
   });
 
-  const results: { slug: string; ok: boolean; error?: string }[] = [];
+  const results: { slug: string; ok: boolean; error?: string; linked?: boolean }[] = [];
 
   for (const product of pending) {
     try {
-      const created = (await tiendaNubeFetch("/products", {
-        method: "POST",
-        body: JSON.stringify({
-          name: { es: product.name },
-          description: { es: product.description },
-          images: product.images.slice(0, 10).map((img) => ({ src: img.url })),
-          variants: [
-            {
-              price: product.price.toFixed(2),
-              stock_management: true,
-              stock: product.stock,
-              sku: product.sku ?? undefined,
-            },
-          ],
-        }),
-      })) as TiendaNubeProduct;
+      // If SM Soluciones (or anything else) already created this SKU in
+      // TiendaNube, link to it instead of creating a duplicate product.
+      const existing = product.sku ? await findTiendaNubeProductBySku(product.sku) : null;
+
+      const tnProduct: TiendaNubeProduct =
+        existing ??
+        ((await tiendaNubeFetch("/products", {
+          method: "POST",
+          body: JSON.stringify({
+            name: { es: product.name },
+            description: { es: product.description },
+            images: product.images.slice(0, 10).map((img) => ({ src: img.url })),
+            variants: [
+              {
+                price: product.price.toFixed(2),
+                stock_management: true,
+                stock: product.stock,
+                sku: product.sku ?? undefined,
+              },
+            ],
+          }),
+        })) as TiendaNubeProduct);
 
       await db.product.update({
         where: { id: product.id },
         data: {
-          tiendaNubeProductId: created.id,
-          tiendaNubeVariantId: created.variants[0]?.id ?? null,
+          tiendaNubeProductId: tnProduct.id,
+          tiendaNubeVariantId: tnProduct.variants[0]?.id ?? null,
         },
       });
 
-      results.push({ slug: product.slug, ok: true });
+      results.push({ slug: product.slug, ok: true, linked: Boolean(existing) });
     } catch (error) {
       results.push({
         slug: product.slug,
