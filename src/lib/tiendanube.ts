@@ -95,6 +95,25 @@ export async function createTiendaNubeOrder(order: {
   }) as Promise<{ id: number }>;
 }
 
+type TiendaNubeProductDetail = {
+  id: number;
+  variants: { id: number; price: string | null; stock: number | null; stock_management: boolean }[];
+};
+
+export async function getTiendaNubeProduct(productId: number) {
+  return tiendaNubeFetch(`/products/${productId}`) as Promise<TiendaNubeProductDetail>;
+}
+
+/** Extracts { price, stock } (in our own Int-pesos / whole-units shape) from a TiendaNube product's first variant. */
+export function readVariantPriceStock(product: TiendaNubeProductDetail) {
+  const variant = product.variants[0];
+  if (!variant) return null;
+  return {
+    price: variant.price != null ? Math.round(parseFloat(variant.price)) : null,
+    stock: variant.stock_management ? (variant.stock ?? 0) : null,
+  };
+}
+
 export async function tiendaNubeFetch(path: string, init?: RequestInit) {
   const accessToken = process.env.TIENDANUBE_ACCESS_TOKEN;
   const storeId = process.env.TIENDANUBE_STORE_ID;
