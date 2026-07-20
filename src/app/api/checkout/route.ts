@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server";
 import { Preference } from "mercadopago";
 import { db } from "@/lib/db";
-import { STORE } from "@/lib/constants";
 import { getMercadoPagoConfig, getSiteUrl, isMercadoPagoConfigured } from "@/lib/mercadopago";
 
 type CheckoutBody = {
-  fulfillment: "delivery" | "pickup";
   customerName: string;
   customerEmail: string;
   customerPhone: string;
-  address?: string;
-  city?: string;
   notes?: string;
   items: { productId: string; quantity: number }[];
 };
@@ -29,12 +25,6 @@ export async function POST(request: Request) {
   if (!body.customerName || !body.customerEmail || !body.customerPhone) {
     return NextResponse.json(
       { error: "Faltan datos de contacto obligatorios." },
-      { status: 400 },
-    );
-  }
-  if (body.fulfillment === "delivery" && !body.address) {
-    return NextResponse.json(
-      { error: "La dirección es obligatoria para envíos a domicilio." },
       { status: 400 },
     );
   }
@@ -75,24 +65,18 @@ export async function POST(request: Request) {
   }
 
   const subtotal = orderItems.reduce((sum, i) => sum + i.subtotal, 0);
-  const shipping =
-    body.fulfillment === "delivery" && subtotal < STORE.freeShippingThreshold
-      ? STORE.deliveryFee
-      : 0;
-  const total = subtotal + shipping;
+  const total = subtotal;
 
   const order = await db.order.create({
     data: {
       status: "pending",
-      fulfillment: body.fulfillment,
+      fulfillment: "pickup",
       customerName: body.customerName,
       customerEmail: body.customerEmail,
       customerPhone: body.customerPhone,
-      address: body.fulfillment === "delivery" ? body.address : null,
-      city: body.fulfillment === "delivery" ? body.city : null,
       notes: body.notes,
       subtotal,
-      shipping,
+      shipping: 0,
       total,
       items: { create: orderItems },
     },
@@ -115,9 +99,6 @@ export async function POST(request: Request) {
           currency_id: "ARS",
           unit_price: item.price,
         })),
-        ...(shipping > 0 && {
-          shipments: { cost: shipping, mode: "not_specified" },
-        }),
         payer: { name: body.customerName, email: body.customerEmail },
         external_reference: order.id,
         back_urls: {

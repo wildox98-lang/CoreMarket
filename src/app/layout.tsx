@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | Core Market",
   },
   description:
-    "Almacén naturista con gourmet, congelados, snacks, granolas, suplementos deportivos y mucho más en Buenos Aires. Retiro en tienda o envío a todo CABA.",
+    "Almacén naturista con gourmet, congelados, snacks, granolas, suplementos deportivos y mucho más en Buenos Aires. Comprá online y retirá sin cargo en el local.",
   openGraph: {
     title: "Core Market",
     description:

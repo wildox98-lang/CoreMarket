@@ -17,9 +17,6 @@ export const STORE = {
     { days: "Sábados", hours: "9:00 – 17:00" },
     { days: "Domingos", hours: "Cerrado" },
   ],
-  freeShippingThreshold: 60000,
-  deliveryFee: 4500,
-  deliveryZoneNote: "Envíos a todo CABA y zona norte del GBA en 24–48hs.",
 } as const;
 
 export function buildWhatsappUrl(message: string) {

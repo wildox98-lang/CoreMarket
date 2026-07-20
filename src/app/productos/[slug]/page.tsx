@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Truck, Storefront } from "@phosphor-icons/react/dist/ssr";
+import { Storefront } from "@phosphor-icons/react/dist/ssr";
 import { ImageGallery } from "@/components/product/image-gallery";
 import { ProductDetailActions } from "@/components/product/product-detail-actions";
 import { ProductTabs } from "@/components/product/product-tabs";
@@ -165,12 +165,8 @@ export default async function ProductPage({
 
           <div className="mt-2 flex flex-col gap-3 rounded-card bg-cream p-5 font-sans text-sm text-olive-700/90">
             <p className="flex items-center gap-2.5">
-              <Truck size={18} className="shrink-0 text-gold-dark" />
-              Envío a todo CABA y zona norte del GBA en 24–48hs.
-            </p>
-            <p className="flex items-center gap-2.5">
               <Storefront size={18} className="shrink-0 text-gold-dark" />
-              Retiro gratis en nuestro local.
+              Retiro gratis en nuestro local. Por ahora no hacemos envíos.
             </p>
           </div>
         </div>

@@ -14,7 +14,6 @@ import { Logo } from "@/components/brand/logo";
 import { NAV_LINKS } from "./nav-links";
 import { useCartStore, useCartCount } from "@/lib/store/cart";
 import { useWishlistStore } from "@/lib/store/wishlist";
-import { STORE } from "@/lib/constants";
 import { CartDrawer } from "./cart-drawer";
 import { MobileNav } from "./mobile-nav";
 
@@ -38,9 +37,7 @@ export default function Header() {
       <header>
         <div className="hidden md:block bg-olive-900 text-cream">
           <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-6 py-2 text-xs tracking-wide">
-            <span>{STORE.deliveryZoneNote}</span>
-            <span className="opacity-50">·</span>
-            <span>Retirá gratis en el local</span>
+            <span>Retirá gratis en el local — por ahora no hacemos envíos</span>
           </div>
         </div>
 

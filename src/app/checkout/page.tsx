@@ -14,15 +14,10 @@ export default function CheckoutPage() {
   const clearCart = useCartStore((s) => s.clear);
   const subtotal = useCartSubtotal();
 
-  const [fulfillment, setFulfillment] = useState<"delivery" | "pickup">("delivery");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const shipping =
-    fulfillment === "delivery" && subtotal < STORE.freeShippingThreshold && subtotal > 0
-      ? STORE.deliveryFee
-      : 0;
-  const total = subtotal + shipping;
+  const total = subtotal;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,12 +31,9 @@ export default function CheckoutPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          fulfillment,
           customerName: formData.get("customerName"),
           customerEmail: formData.get("customerEmail"),
           customerPhone: formData.get("customerPhone"),
-          address: formData.get("address") || undefined,
-          city: formData.get("city") || undefined,
           notes: formData.get("notes") || undefined,
           items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
         }),
@@ -90,47 +82,12 @@ export default function CheckoutPage() {
 
       <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr]">
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-          <fieldset className="flex flex-col gap-3">
-            <legend className="mb-1 font-sans text-sm font-semibold text-olive-900">
-              ¿Cómo querés recibirlo?
-            </legend>
-            <div className="flex gap-3">
-              <label
-                className={`flex-1 cursor-pointer rounded-card border px-5 py-4 transition-colors ${
-                  fulfillment === "delivery"
-                    ? "border-olive-700 bg-olive-700/5"
-                    : "border-border"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="fulfillment"
-                  value="delivery"
-                  checked={fulfillment === "delivery"}
-                  onChange={() => setFulfillment("delivery")}
-                  className="sr-only"
-                />
-                <span className="font-sans text-sm font-semibold text-olive-900">Envío a domicilio</span>
-                <p className="mt-1 font-sans text-xs text-olive-500">{STORE.deliveryZoneNote}</p>
-              </label>
-              <label
-                className={`flex-1 cursor-pointer rounded-card border px-5 py-4 transition-colors ${
-                  fulfillment === "pickup" ? "border-olive-700 bg-olive-700/5" : "border-border"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="fulfillment"
-                  value="pickup"
-                  checked={fulfillment === "pickup"}
-                  onChange={() => setFulfillment("pickup")}
-                  className="sr-only"
-                />
-                <span className="font-sans text-sm font-semibold text-olive-900">Retiro en tienda</span>
-                <p className="mt-1 font-sans text-xs text-olive-500">Gratis en {STORE.address}</p>
-              </label>
-            </div>
-          </fieldset>
+          <div className="rounded-card border border-olive-700/20 bg-olive-700/5 px-5 py-4">
+            <span className="font-sans text-sm font-semibold text-olive-900">Retiro en tienda</span>
+            <p className="mt-1 font-sans text-xs text-olive-500">
+              Sin costo, en {STORE.address}. Te avisamos por WhatsApp cuando esté listo.
+            </p>
+          </div>
 
           <fieldset className="flex flex-col gap-4">
             <legend className="mb-1 font-sans text-sm font-semibold text-olive-900">
@@ -141,12 +98,6 @@ export default function CheckoutPage() {
               <Field label="Email" name="customerEmail" type="email" required />
               <Field label="Teléfono" name="customerPhone" type="tel" required />
             </div>
-            {fulfillment === "delivery" && (
-              <div className="grid grid-cols-2 gap-4">
-                <Field label="Dirección" name="address" required className="col-span-2" />
-                <Field label="Ciudad" name="city" defaultValue="Buenos Aires" />
-              </div>
-            )}
             <label className="flex flex-col gap-1.5">
               <span className="font-sans text-sm text-olive-700">Notas (opcional)</span>
               <textarea
@@ -197,10 +148,6 @@ export default function CheckoutPage() {
             <div className="flex justify-between text-olive-700">
               <span>Subtotal</span>
               <span className="tabular-nums">{formatPrice(subtotal)}</span>
-            </div>
-            <div className="flex justify-between text-olive-700">
-              <span>Envío</span>
-              <span className="tabular-nums">{shipping === 0 ? "Gratis" : formatPrice(shipping)}</span>
             </div>
             <div className="mt-1 flex justify-between border-t border-border pt-3 font-semibold text-olive-900">
               <span>Total</span>

@@ -8,7 +8,7 @@ import { buildWhatsappUrl } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Preguntas Frecuentes",
-  description: "Envíos, pagos, cambios y devoluciones en Core Market.",
+  description: "Retiro en tienda, pagos, cambios y devoluciones en Core Market.",
 };
 
 export default function FaqPage() {
@@ -22,8 +22,8 @@ export default function FaqPage() {
           Preguntas frecuentes
         </h1>
         <p className="max-w-md font-sans text-base text-olive-700/80">
-          Todo lo que necesitás saber sobre envíos, pagos y nuestra política
-          de cambios.
+          Todo lo que necesitás saber sobre el retiro en el local, pagos y
+          nuestra política de cambios.
         </p>
       </Reveal>
 

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Minus, Plus, Trash, X } from "@phosphor-icons/react/dist/ssr";
 import { useCartStore, useCartSubtotal } from "@/lib/store/cart";
 import { formatPrice } from "@/lib/format";
-import { STORE } from "@/lib/constants";
 
 export function CartDrawer() {
   const isOpen = useCartStore((s) => s.isOpen);
@@ -23,11 +22,6 @@ export function CartDrawer() {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  const missingForFreeShipping = Math.max(
-    STORE.freeShippingThreshold - subtotal,
-    0,
-  );
 
   return (
     <div
@@ -78,16 +72,9 @@ export function CartDrawer() {
         ) : (
           <>
             <div className="flex-1 overflow-y-auto px-5 py-4">
-              {missingForFreeShipping > 0 ? (
-                <p className="mb-4 rounded-xl bg-sand-dark/50 px-4 py-2.5 text-xs text-olive-700">
-                  Te faltan {formatPrice(missingForFreeShipping)} para envío
-                  gratis.
-                </p>
-              ) : (
-                <p className="mb-4 rounded-xl bg-olive-700/10 px-4 py-2.5 text-xs font-medium text-olive-700">
-                  ¡Tenés envío gratis en este pedido!
-                </p>
-              )}
+              <p className="mb-4 rounded-xl bg-olive-700/10 px-4 py-2.5 text-xs font-medium text-olive-700">
+                Retirás tu pedido sin cargo en el local.
+              </p>
               <ul className="flex flex-col gap-5">
                 {items.map((item) => (
                   <li key={item.productId} className="flex gap-3">
@@ -168,7 +155,7 @@ export function CartDrawer() {
                 Finalizar compra
               </Link>
               <p className="mt-2 text-center text-xs text-olive-500">
-                Envío o retiro se calculan en el checkout.
+                Retiro sin cargo en el local.
               </p>
             </div>
           </>
