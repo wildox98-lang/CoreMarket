@@ -61,12 +61,20 @@ export function toProductCard(product: ProductWithCardData): ProductCard {
   };
 }
 
-export async function getCategories() {
-  return db.category.findMany({ orderBy: { position: "asc" } });
+/** Pass a brandSlug to only return categories that have products from that brand. */
+export async function getCategories(brandSlug?: string) {
+  return db.category.findMany({
+    where: brandSlug ? { products: { some: { brand: { slug: brandSlug } } } } : undefined,
+    orderBy: { position: "asc" },
+  });
 }
 
-export async function getBrands() {
-  return db.brand.findMany({ orderBy: { name: "asc" } });
+/** Pass a categorySlug to only return brands that have products in that category. */
+export async function getBrands(categorySlug?: string) {
+  return db.brand.findMany({
+    where: categorySlug ? { products: { some: { category: { slug: categorySlug } } } } : undefined,
+    orderBy: { name: "asc" },
+  });
 }
 
 export async function getProductBySlug(slug: string) {

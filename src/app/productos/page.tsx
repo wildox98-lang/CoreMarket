@@ -33,13 +33,14 @@ export default async function ProductosPage({
     page: params.page ? Number(first(params.page)) : 1,
   };
 
-  const [categories, brands, result] = await Promise.all([
+  const [allCategories, categories, brands, result] = await Promise.all([
     getCategories(),
-    getBrands(),
+    getCategories(filters.marca),
+    getBrands(filters.categoria),
     getFilteredProducts(filters),
   ]);
 
-  const activeCategory = categories.find((c) => c.slug === filters.categoria);
+  const activeCategory = allCategories.find((c) => c.slug === filters.categoria);
 
   return (
     <div className="mx-auto max-w-[1600px] px-6 py-12">
