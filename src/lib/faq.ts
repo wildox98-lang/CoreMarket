@@ -2,11 +2,6 @@ import { STORE } from "./constants";
 
 export const FAQ_ITEMS = [
   {
-    question: "¿Hacen envíos a domicilio?",
-    answer:
-      "Por ahora no hacemos envíos a domicilio. Todos los pedidos se retiran sin cargo en el local.",
-  },
-  {
     question: "¿Cómo retiro mi pedido en el local?",
     answer: `Comprás desde la web y pasás a buscarlo, sin costo, por ${STORE.address}. Te avisamos por WhatsApp apenas esté listo.`,
   },

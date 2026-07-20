@@ -37,7 +37,7 @@ export default function Header() {
       <header>
         <div className="hidden md:block bg-olive-900 text-cream">
           <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-6 py-2 text-xs tracking-wide">
-            <span>Retirá gratis en el local — por ahora no hacemos envíos</span>
+            <span>Retirá gratis en el local</span>
           </div>
         </div>
 

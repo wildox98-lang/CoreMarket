@@ -166,7 +166,7 @@ export default async function ProductPage({
           <div className="mt-2 flex flex-col gap-3 rounded-card bg-cream p-5 font-sans text-sm text-olive-700/90">
             <p className="flex items-center gap-2.5">
               <Storefront size={18} className="shrink-0 text-gold-dark" />
-              Retiro gratis en nuestro local. Por ahora no hacemos envíos.
+              Retiro gratis en nuestro local.
             </p>
           </div>
         </div>
