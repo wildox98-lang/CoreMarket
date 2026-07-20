@@ -9,7 +9,7 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-10">
+    <div className="mx-auto max-w-[1600px] px-6 py-10">
       <nav
         aria-label="Categorías"
         className="-mx-6 mb-10 flex gap-3 overflow-x-auto px-6 pb-1"

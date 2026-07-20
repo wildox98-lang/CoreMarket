@@ -38,7 +38,7 @@ const VALUES = [
 export default function NosotrosPage() {
   return (
     <div>
-      <section className="mx-auto max-w-7xl px-6 py-16">
+      <section className="mx-auto max-w-[1600px] px-6 py-16">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div className="flex flex-col gap-5">
             <Reveal>
@@ -89,7 +89,7 @@ export default function NosotrosPage() {
       </section>
 
       <section className="border-y border-border/70 bg-cream">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 py-14 sm:grid-cols-4">
+        <div className="mx-auto grid max-w-[1600px] grid-cols-2 gap-8 px-6 py-14 sm:grid-cols-4">
           {[
             { value: 2016, label: "Abrimos nuestras puertas" },
             { value: 2500, suffix: "+", label: "Clientes en Buenos Aires" },
@@ -108,7 +108,7 @@ export default function NosotrosPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20">
+      <section className="mx-auto max-w-[1600px] px-6 py-20">
         <SectionHeader
           eyebrow="Lo que nos guía"
           title="Cuatro ideas que no negociamos"

@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="mx-auto max-w-7xl px-6 py-12" aria-busy="true" aria-label="Cargando productos">
+    <div className="mx-auto max-w-[1600px] px-6 py-12" aria-busy="true" aria-label="Cargando productos">
       <div className="mb-8 flex flex-col gap-3">
         <div className="h-3 w-20 animate-pulse rounded-full bg-sand-dark/60" />
         <div className="h-9 w-64 animate-pulse rounded-full bg-sand-dark/60" />

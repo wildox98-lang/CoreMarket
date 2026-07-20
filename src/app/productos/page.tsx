@@ -42,7 +42,7 @@ export default async function ProductosPage({
   const activeCategory = categories.find((c) => c.slug === filters.categoria);
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-12">
+    <div className="mx-auto max-w-[1600px] px-6 py-12">
       <div className="mb-8 flex flex-col gap-2">
         <span className="font-sans text-xs font-semibold uppercase tracking-[0.25em] text-gold-dark">
           Catálogo

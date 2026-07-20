@@ -19,7 +19,7 @@ export default async function Footer() {
 
   return (
     <footer className="bg-olive-900 text-cream">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-[1600px] gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
         <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
           <Logo className="text-cream" />
           <p className="max-w-xs font-sans text-sm leading-relaxed text-cream/70">
@@ -126,7 +126,7 @@ export default async function Footer() {
       </div>
 
       <div className="border-t border-cream/10 px-6 py-6">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 font-sans text-xs text-cream/50 sm:flex-row">
+        <div className="mx-auto flex max-w-[1600px] flex-col items-center justify-between gap-2 font-sans text-xs text-cream/50 sm:flex-row">
           <p>© {new Date().getFullYear()} Core Market. Todos los derechos reservados.</p>
           <p>Hecho con cariño en Buenos Aires.</p>
         </div>

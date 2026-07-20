@@ -6,7 +6,7 @@ import { STORE, buildWhatsappUrl } from "@/lib/constants";
 export function StoreLocation() {
   return (
     <section className="bg-cream">
-      <div className="mx-auto max-w-7xl px-6 py-20">
+      <div className="mx-auto max-w-[1600px] px-6 py-20">
         <SectionHeader
           eyebrow="Visitanos"
           title="Te esperamos en nuestro local"

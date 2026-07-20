@@ -36,13 +36,13 @@ export default function Header() {
     <>
       <header>
         <div className="hidden md:block bg-olive-900 text-cream">
-          <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-6 py-2 text-xs tracking-wide">
+          <div className="mx-auto flex max-w-[1600px] items-center justify-center gap-6 px-6 py-2 text-xs tracking-wide">
             <span>Retirá gratis en el local</span>
           </div>
         </div>
 
         <div className="sticky top-0 z-40 border-b border-border/70 bg-sand/90 backdrop-blur-md">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-4 py-3 sm:px-6">
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
@@ -108,7 +108,7 @@ export default function Header() {
             <div className="border-t border-border/70 bg-cream px-4 py-3 sm:px-6">
               <form
                 onSubmit={handleSearch}
-                className="mx-auto flex max-w-7xl items-center gap-3"
+                className="mx-auto flex max-w-[1600px] items-center gap-3"
               >
                 <MagnifyingGlass
                   size={20}

@@ -50,7 +50,7 @@ export default function TiendaPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20">
+      <section className="mx-auto max-w-[1600px] px-6 py-20">
         <SectionHeader
           eyebrow="Qué vas a encontrar"
           title="Un local pensado para pasar y quedarte"
