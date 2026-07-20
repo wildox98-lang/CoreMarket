@@ -47,6 +47,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "mayoristadelegumbres.com.ar" },
       { protocol: "https", hostname: "www.optimumnutrition.com" },
       { protocol: "https", hostname: "cdn.contimarket.com" },
+      { protocol: "https", hostname: "moms.com.ar" },
+      { protocol: "https", hostname: "www.alimentoschacabuco.com" },
+      { protocol: "https", hostname: "dieteticaboyaca.com.ar" },
     ],
   },
 };
