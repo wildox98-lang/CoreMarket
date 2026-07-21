@@ -130,14 +130,18 @@ export async function getFilteredProducts(filters: ProductFilters) {
     where.tags = { contains: filters.tag, mode: "insensitive" };
   }
 
-  const orderBy: Prisma.ProductOrderByWithRelationInput =
+  // A second sort key (id) is required: without it, rows tied on the primary
+  // key (e.g. almost every product has featured: false) come back in a
+  // non-deterministic order, so the same product can show up on more than
+  // one page while others get skipped.
+  const orderBy: Prisma.ProductOrderByWithRelationInput[] =
     filters.sort === "precio-asc"
-      ? { price: "asc" }
+      ? [{ price: "asc" }, { id: "asc" }]
       : filters.sort === "precio-desc"
-        ? { price: "desc" }
+        ? [{ price: "desc" }, { id: "asc" }]
         : filters.sort === "novedades"
-          ? { createdAt: "desc" }
-          : { featured: "desc" };
+          ? [{ createdAt: "desc" }, { id: "asc" }]
+          : [{ featured: "desc" }, { id: "asc" }];
 
   const page = Math.max(filters.page ?? 1, 1);
 
