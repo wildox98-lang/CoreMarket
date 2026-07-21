@@ -104,7 +104,7 @@ export type ProductFilters = {
   categoria?: string;
   marca?: string;
   tag?: string;
-  sort?: "relevancia" | "precio-asc" | "precio-desc" | "novedades";
+  sort?: "relevancia" | "precio-asc" | "precio-desc" | "novedades" | "descuentos" | "az";
   page?: number;
 };
 
@@ -129,6 +129,9 @@ export async function getFilteredProducts(filters: ProductFilters) {
   if (filters.tag) {
     where.tags = { contains: filters.tag, mode: "insensitive" };
   }
+  if (filters.sort === "descuentos") {
+    where.compareAtPrice = { not: null };
+  }
 
   // A second sort key (id) is required: without it, rows tied on the primary
   // key (e.g. almost every product has featured: false) come back in a
@@ -141,7 +144,11 @@ export async function getFilteredProducts(filters: ProductFilters) {
         ? [{ price: "desc" }, { id: "asc" }]
         : filters.sort === "novedades"
           ? [{ createdAt: "desc" }, { id: "asc" }]
-          : [{ featured: "desc" }, { id: "asc" }];
+          : filters.sort === "descuentos"
+            ? [{ compareAtPrice: "desc" }, { id: "asc" }]
+            : filters.sort === "relevancia"
+              ? [{ featured: "desc" }, { id: "asc" }]
+              : [{ name: "asc" }, { id: "asc" }];
 
   const page = Math.max(filters.page ?? 1, 1);
 

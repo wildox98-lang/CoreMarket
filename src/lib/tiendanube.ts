@@ -105,6 +105,7 @@ export type TiendaNubeProductDetail = {
   variants: {
     id: number;
     price: string | null;
+    promotional_price: string | null;
     stock: number | null;
     stock_management: boolean;
     sku: string | null;
@@ -116,12 +117,25 @@ export async function getTiendaNubeProduct(productId: number) {
   return tiendaNubeFetch(`/products/${productId}`) as Promise<TiendaNubeProductDetail>;
 }
 
-/** Extracts { price, stock } (in our own Int-pesos / whole-units shape) from a TiendaNube product's first variant. */
+/**
+ * Extracts { price, compareAtPrice, stock } (in our own Int-pesos / whole-units
+ * shape) from a TiendaNube product's first variant. TiendaNube's `price` is
+ * the regular price and `promotional_price` is the discounted one when the
+ * merchant has a sale running — our `price` is what the customer actually
+ * pays, and `compareAtPrice` is the crossed-out original, so they're swapped
+ * relative to TiendaNube's naming.
+ */
 export function readVariantPriceStock(product: TiendaNubeProductDetail) {
   const variant = product.variants[0];
   if (!variant) return null;
+
+  const basePrice = variant.price != null ? parseFloat(variant.price) : null;
+  const promoPrice = variant.promotional_price != null ? parseFloat(variant.promotional_price) : null;
+  const onSale = promoPrice != null && basePrice != null && promoPrice < basePrice;
+
   return {
-    price: variant.price != null ? Math.round(parseFloat(variant.price)) : null,
+    price: onSale ? Math.round(promoPrice) : basePrice != null ? Math.round(basePrice) : null,
+    compareAtPrice: onSale ? Math.round(basePrice) : null,
     stock: variant.stock_management ? (variant.stock ?? 0) : null,
   };
 }
@@ -146,7 +160,9 @@ export function buildLocalUpdateFromTiendaNube(product: TiendaNubeProductDetail,
   const images = readProductImages(product);
 
   return {
-    ...(priceStock?.price != null ? { price: priceStock.price } : {}),
+    ...(priceStock?.price != null
+      ? { price: priceStock.price, compareAtPrice: priceStock.compareAtPrice }
+      : {}),
     ...(priceStock?.stock != null ? { stock: priceStock.stock } : {}),
     ...(images
       ? {
@@ -257,6 +273,7 @@ export async function buildLocalCreateFromTiendaNube(product: TiendaNubeProductD
     shortDescription: brandName === "Sin Marca" ? categoryName : `${brandName} · ${categoryName}`,
     description: `${name}${brandName === "Sin Marca" ? "" : ` de ${brandName}`}. Disponible en Core Market.`,
     price: priceStock?.price ?? 0,
+    compareAtPrice: priceStock?.compareAtPrice ?? null,
     stock: priceStock?.stock ?? 0,
     tiendaNubeProductId: product.id,
     tiendaNubeVariantId: variant?.id ?? null,

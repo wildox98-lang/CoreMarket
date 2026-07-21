@@ -5,10 +5,12 @@ import { X } from "@phosphor-icons/react/dist/ssr";
 import type { Category, Brand } from "@/generated/prisma/client";
 
 const SORT_OPTIONS = [
+  { value: "az", label: "A - Z" },
   { value: "relevancia", label: "Relevancia" },
   { value: "novedades", label: "Novedades" },
   { value: "precio-asc", label: "Precio: menor a mayor" },
   { value: "precio-desc", label: "Precio: mayor a menor" },
+  { value: "descuentos", label: "Descuentos" },
 ] as const;
 
 export function FilterBar({
@@ -32,7 +34,7 @@ export function FilterBar({
 
   const activeCategoria = searchParams.get("categoria") ?? "";
   const activeMarca = searchParams.get("marca") ?? "";
-  const activeSort = searchParams.get("sort") ?? "relevancia";
+  const activeSort = searchParams.get("sort") ?? "az";
   const activeQ = searchParams.get("q") ?? "";
 
   const hasFilters = activeCategoria || activeMarca || activeQ;
