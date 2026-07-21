@@ -41,7 +41,6 @@ const jsonLd = {
   name: STORE.name,
   url: "https://coremarket.com.ar",
   telephone: `+${STORE.whatsapp}`,
-  email: STORE.email,
   address: {
     "@type": "PostalAddress",
     streetAddress: STORE.address,

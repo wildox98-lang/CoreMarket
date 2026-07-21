@@ -9,7 +9,6 @@ export const STORE = {
   whatsappDisplay: "+54 9 11 3009-6750",
   instagram: "https://www.instagram.com/coremarket.ba/",
   instagramHandle: "@coremarket.ba",
-  email: "hola@coremarket.com.ar",
   // Where "nuevo pedido pagado" notifications are sent (internal, not customer-facing).
   notificationEmail: "micaelaliotti3@gmail.com",
   hours: [

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { EnvelopeSimple, InstagramLogo, MapPin, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
+import { InstagramLogo, MapPin, WhatsappLogo } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "@/components/ui/reveal";
 import { ContactForm } from "@/components/contact/contact-form";
 import { STORE } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Contacto",
-  description: "Escribinos por WhatsApp, Instagram o email. Te respondemos a la brevedad.",
+  description: "Escribinos por WhatsApp o Instagram. Te respondemos a la brevedad.",
 };
 
 export default function ContactoPage() {
@@ -41,12 +41,6 @@ export default function ContactoPage() {
             label="Instagram"
             value={STORE.instagramHandle}
             href={STORE.instagram}
-          />
-          <ContactLink
-            icon={<EnvelopeSimple size={20} />}
-            label="Email"
-            value={STORE.email}
-            href={`mailto:${STORE.email}`}
           />
           <ContactLink
             icon={<MapPin size={20} />}

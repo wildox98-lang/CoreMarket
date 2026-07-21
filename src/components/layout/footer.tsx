@@ -1,10 +1,5 @@
 import Link from "next/link";
-import {
-  InstagramLogo,
-  WhatsappLogo,
-  EnvelopeSimple,
-  MapPin,
-} from "@phosphor-icons/react/dist/ssr";
+import { InstagramLogo, WhatsappLogo, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { Logo } from "@/components/brand/logo";
 import { NewsletterForm } from "./newsletter-form";
 import { STORE, buildWhatsappUrl } from "@/lib/constants";
@@ -101,13 +96,6 @@ export default async function Footer() {
             >
               <MapPin size={16} className="mt-0.5 shrink-0" />
               {STORE.address}
-            </a>
-            <a
-              href={`mailto:${STORE.email}`}
-              className="flex items-center gap-2 transition-colors hover:text-gold"
-            >
-              <EnvelopeSimple size={16} className="shrink-0" />
-              {STORE.email}
             </a>
           </div>
         </div>
