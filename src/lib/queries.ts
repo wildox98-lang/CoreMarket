@@ -77,6 +77,38 @@ export async function getBrands(categorySlug?: string) {
   });
 }
 
+export type CategoryShowcaseItem = {
+  slug: string;
+  name: string;
+  productCount: number;
+  image: string;
+};
+
+/** One representative (featured, else newest) product photo + active product count per category, for the homepage showcase. */
+export async function getCategoryShowcase(): Promise<CategoryShowcaseItem[]> {
+  const categories = await db.category.findMany({ orderBy: { position: "asc" } });
+
+  return Promise.all(
+    categories.map(async (category) => {
+      const [productCount, representative] = await Promise.all([
+        db.product.count({ where: { categoryId: category.id, active: true } }),
+        db.product.findFirst({
+          where: { categoryId: category.id, active: true },
+          orderBy: [{ featured: "desc" }, { id: "asc" }],
+          include: { images: { orderBy: { position: "asc" }, take: 1 } },
+        }),
+      ]);
+
+      return {
+        slug: category.slug,
+        name: category.name,
+        productCount,
+        image: representative?.images[0]?.url ?? category.image,
+      };
+    }),
+  );
+}
+
 export async function getProductBySlug(slug: string) {
   const product = await db.product.findUnique({
     where: { slug, active: true },
