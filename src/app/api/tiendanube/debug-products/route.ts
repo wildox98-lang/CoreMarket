@@ -15,6 +15,20 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
 
+  if (url.searchParams.get("dupes") === "true") {
+    const all = await db.product.findMany({
+      select: { id: true, slug: true, sku: true, name: true, price: true, brandId: true },
+      orderBy: { name: "asc" },
+    });
+    const groups = new Map<string, typeof all>();
+    for (const p of all) {
+      const key = `${p.name.trim().toLowerCase()}__${p.brandId}`;
+      groups.set(key, [...(groups.get(key) ?? []), p]);
+    }
+    const duplicates = [...groups.values()].filter((g) => g.length > 1);
+    return NextResponse.json({ totalProducts: all.length, duplicateGroups: duplicates.length, duplicates });
+  }
+
   const products = await db.product.findMany({
     where: q ? { name: { contains: q, mode: "insensitive" } } : undefined,
     select: {
@@ -31,7 +45,7 @@ export async function GET(request: Request) {
       createdAt: true,
     },
     orderBy: { name: "asc" },
-    take: 100,
+    take: 500,
   });
 
   return NextResponse.json({ count: products.length, products });
