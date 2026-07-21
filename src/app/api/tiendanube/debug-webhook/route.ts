@@ -3,8 +3,7 @@ import { db } from "@/lib/db";
 import {
   findTiendaNubeProductBySku,
   getTiendaNubeProduct,
-  buildLocalCreateFromTiendaNube,
-  buildLocalUpdateFromTiendaNube,
+  syncLocalProductFromTiendaNube,
   isTiendaNubeConfigured,
 } from "@/lib/tiendanube";
 
@@ -24,8 +23,8 @@ async function findTnProduct(sku: string | null, id: string | null) {
  * Diagnostic-only reproduction of the product/created & product/updated
  * webhook logic, callable directly (bypassing the HMAC signature check) so
  * we can see exactly what happens for a given SKU/id without waiting on a
- * real TiendaNube webhook delivery. GET inspects only; POST ?apply=true
- * actually creates/updates the local product, as a manual recovery path.
+ * real TiendaNube webhook delivery. GET inspects only; POST actually applies
+ * syncLocalProductFromTiendaNube, as a manual recovery path.
  */
 export async function GET(request: Request) {
   if (!requireAuthorized(request)) {
@@ -77,30 +76,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ found: false, error: "No existe ese producto/SKU en TiendaNube" });
     }
 
-    let product = await db.product.findFirst({ where: { tiendaNubeProductId: tnProduct.id } });
-
-    if (!product) {
-      const variantSku = tnProduct.variants[0]?.sku?.trim();
-      if (variantSku) {
-        const bySku = await db.product.findUnique({ where: { sku: variantSku } });
-        if (bySku) {
-          product = await db.product.update({
-            where: { id: bySku.id },
-            data: { tiendaNubeProductId: tnProduct.id, tiendaNubeVariantId: tnProduct.variants[0]?.id ?? null },
-          });
-        }
-      }
-    }
-
-    if (product) {
-      const data = buildLocalUpdateFromTiendaNube(tnProduct, product.name);
-      const updated = await db.product.update({ where: { id: product.id }, data: { ...data, active: true } });
-      return NextResponse.json({ action: "updated", product: updated });
-    }
-
-    const createData = await buildLocalCreateFromTiendaNube(tnProduct);
-    const created = await db.product.create({ data: createData });
-    return NextResponse.json({ action: "created", product: created });
+    const product = await syncLocalProductFromTiendaNube(tnProduct);
+    return NextResponse.json({ product });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined },

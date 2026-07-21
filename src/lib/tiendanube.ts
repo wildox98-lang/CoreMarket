@@ -266,6 +266,42 @@ export async function buildLocalCreateFromTiendaNube(product: TiendaNubeProductD
   };
 }
 
+/**
+ * Applies a TiendaNube product/created or product/updated event locally:
+ * updates the linked product if one exists, links an unlinked local product
+ * that shares its SKU, or creates a brand-new local product otherwise.
+ *
+ * The SKU fallback only claims a local product that isn't linked to any
+ * TiendaNube product yet — some local products carry short placeholder SKUs
+ * (not real barcodes) that a merchant could coincidentally reuse on an
+ * unrelated new TiendaNube product, and relinking one of those would silently
+ * repoint an already-synced product's price/stock source.
+ */
+export async function syncLocalProductFromTiendaNube(tnProduct: TiendaNubeProductDetail) {
+  let product = await db.product.findFirst({ where: { tiendaNubeProductId: tnProduct.id } });
+
+  if (!product) {
+    const sku = tnProduct.variants[0]?.sku?.trim();
+    if (sku) {
+      const bySku = await db.product.findUnique({ where: { sku } });
+      if (bySku && bySku.tiendaNubeProductId == null) {
+        product = await db.product.update({
+          where: { id: bySku.id },
+          data: { tiendaNubeProductId: tnProduct.id, tiendaNubeVariantId: tnProduct.variants[0]?.id ?? null },
+        });
+      }
+    }
+  }
+
+  if (product) {
+    const data = buildLocalUpdateFromTiendaNube(tnProduct, product.name);
+    return db.product.update({ where: { id: product.id }, data: { ...data, active: true } });
+  }
+
+  const createData = await buildLocalCreateFromTiendaNube(tnProduct);
+  return db.product.create({ data: createData });
+}
+
 /** Returns the existing TiendaNube product for a SKU, or null if none has that SKU yet. */
 export async function findTiendaNubeProductBySku(sku: string) {
   const accessToken = process.env.TIENDANUBE_ACCESS_TOKEN;
