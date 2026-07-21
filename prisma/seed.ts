@@ -1210,12 +1210,17 @@ async function main() {
   }
 
   // Clean up leftover products from earlier demo catalogs (pre-real-catalog
-  // seeds). Only remove ones with no order history, so we never touch data
-  // tied to a real purchase.
+  // seeds). Only remove ones with no order history AND no TiendaNube link, so
+  // this never touches data tied to a real purchase or a product that was
+  // added/synced from TiendaNube after this static list was written — this
+  // runs on every deploy (see package.json's build script), so without the
+  // tiendaNubeProductId guard it would silently delete every product the
+  // webhook/reconciliation created since their slugs aren't in this list.
   await db.product.deleteMany({
     where: {
       slug: { notIn: REAL_PRODUCTS.map((p) => p.slug) },
       orderItems: { none: {} },
+      tiendaNubeProductId: null,
     },
   });
 
