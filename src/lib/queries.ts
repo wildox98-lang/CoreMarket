@@ -84,20 +84,40 @@ export type CategoryShowcaseItem = {
   image: string;
 };
 
-/** One representative (featured, else newest) product photo + active product count per category, for the homepage showcase. */
+// Curated photo pick per category for the homepage showcase (picked for how
+// well the product reads at a glance, independent of its actual category).
+// Falls back to the featured/first active product in the category if the
+// pinned product ever goes inactive or is removed.
+const PINNED_SHOWCASE_PRODUCTS: Record<string, string> = {
+  "suplementos-deportivos": "ena-sport-creatina-300gr",
+  "almacen-naturista": "mani-king-pasta-de-mani-crunchy-350gr",
+  "semillas-frutos-secos-cereales": "almendras-non-pareil-100gr",
+  "endulzantes-y-dulces": "jual-stevia-liquida-125cc",
+};
+
+/** One representative product photo + active product count per category, for the homepage showcase. */
 export async function getCategoryShowcase(): Promise<CategoryShowcaseItem[]> {
   const categories = await db.category.findMany({ orderBy: { position: "asc" } });
 
   return Promise.all(
     categories.map(async (category) => {
-      const [productCount, representative] = await Promise.all([
+      const pinnedSlug = PINNED_SHOWCASE_PRODUCTS[category.slug];
+      const [productCount, pinned, fallback] = await Promise.all([
         db.product.count({ where: { categoryId: category.id, active: true } }),
+        pinnedSlug
+          ? db.product.findFirst({
+              where: { slug: pinnedSlug, active: true },
+              include: { images: { orderBy: { position: "asc" }, take: 1 } },
+            })
+          : null,
         db.product.findFirst({
           where: { categoryId: category.id, active: true },
           orderBy: [{ featured: "desc" }, { id: "asc" }],
           include: { images: { orderBy: { position: "asc" }, take: 1 } },
         }),
       ]);
+
+      const representative = pinned ?? fallback;
 
       return {
         slug: category.slug,
