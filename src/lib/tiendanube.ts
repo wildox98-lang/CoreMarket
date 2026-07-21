@@ -97,7 +97,7 @@ export async function createTiendaNubeOrder(order: {
   }) as Promise<{ id: number }>;
 }
 
-type TiendaNubeProductDetail = {
+export type TiendaNubeProductDetail = {
   id: number;
   name: { es?: string; pt?: string };
   brand: string | null;
