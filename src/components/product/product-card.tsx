@@ -81,7 +81,11 @@ export function ProductCard({ product }: { product: ProductCardData }) {
               stock: product.stock,
             })
           }
-          className="absolute inset-x-3 bottom-3 flex translate-y-2 cursor-pointer items-center justify-center gap-2 rounded-full bg-cream/95 py-2.5 text-sm font-semibold text-olive-900 opacity-0 shadow-soft backdrop-blur transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-0 sm:disabled:opacity-40"
+          className={`absolute inset-x-3 bottom-3 flex items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold shadow-soft backdrop-blur transition-all duration-300 ${
+            product.stock === 0
+              ? "translate-y-0 cursor-not-allowed border border-olive-900/60 bg-cream text-olive-900 opacity-100"
+              : "translate-y-2 cursor-pointer border border-transparent bg-cream/95 text-olive-900 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+          }`}
         >
           <ShoppingBagOpen size={16} />
           {product.stock === 0 ? "Sin stock" : "Agregar"}

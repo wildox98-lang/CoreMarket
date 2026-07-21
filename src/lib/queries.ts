@@ -115,9 +115,9 @@ export async function getFilteredProducts(filters: ProductFilters) {
 
   if (filters.q) {
     where.OR = [
-      { name: { contains: filters.q } },
-      { shortDescription: { contains: filters.q } },
-      { tags: { contains: filters.q } },
+      { name: { contains: filters.q, mode: "insensitive" } },
+      { shortDescription: { contains: filters.q, mode: "insensitive" } },
+      { tags: { contains: filters.q, mode: "insensitive" } },
     ];
   }
   if (filters.categoria) {
@@ -127,7 +127,7 @@ export async function getFilteredProducts(filters: ProductFilters) {
     where.brand = { slug: filters.marca };
   }
   if (filters.tag) {
-    where.tags = { contains: filters.tag };
+    where.tags = { contains: filters.tag, mode: "insensitive" };
   }
 
   const orderBy: Prisma.ProductOrderByWithRelationInput =

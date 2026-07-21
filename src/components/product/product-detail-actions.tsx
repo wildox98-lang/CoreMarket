@@ -62,7 +62,7 @@ export function ProductDetailActions({
           type="button"
           disabled={stock === 0}
           onClick={() => addItem({ productId, slug, name, price, image, stock }, quantity)}
-          className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-olive-900 px-6 py-3.5 font-sans text-sm font-semibold text-cream transition-colors hover:bg-olive-700 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full border border-transparent bg-olive-900 px-6 py-3.5 font-sans text-sm font-semibold text-cream transition-colors hover:bg-olive-700 disabled:cursor-not-allowed disabled:border-olive-900/60 disabled:bg-cream disabled:text-olive-900"
         >
           <ShoppingBagOpen size={18} />
           {stock === 0 ? "Sin stock" : "Agregar al carrito"}
