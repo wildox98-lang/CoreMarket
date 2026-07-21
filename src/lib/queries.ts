@@ -84,46 +84,32 @@ export type CategoryShowcaseItem = {
   image: string;
 };
 
-// Curated photo pick per category for the homepage showcase (picked for how
-// well the product reads at a glance, independent of its actual category).
-// Falls back to the featured/first active product in the category if the
-// pinned product ever goes inactive or is removed.
-const PINNED_SHOWCASE_PRODUCTS: Record<string, string> = {
-  "suplementos-deportivos": "ena-sport-creatina-300gr",
-  "almacen-naturista": "mani-king-pasta-de-mani-crunchy-350gr",
-  "semillas-frutos-secos-cereales": "almendras-non-pareil-100gr",
-  "endulzantes-y-dulces": "jual-stevia-liquida-125cc",
+// Curated, background-removed product cutouts for the homepage showcase —
+// static assets instead of a live product photo so they can be cleanly
+// silhouetted against the dark card once, rather than re-processing
+// whatever photo happens to be "featured" in the category.
+const SHOWCASE_IMAGES: Record<string, string> = {
+  "almacen-naturista": "/category-showcase/almacen-naturista.png",
+  "barritas-y-snacks": "/category-showcase/barritas-y-snacks.png",
+  congelados: "/category-showcase/congelados.png",
+  "semillas-frutos-secos-cereales": "/category-showcase/semillas-frutos-secos-cereales.png",
+  "suplementos-deportivos": "/category-showcase/suplementos-deportivos.png",
+  "endulzantes-y-dulces": "/category-showcase/endulzantes-y-dulces.png",
 };
 
-/** One representative product photo + active product count per category, for the homepage showcase. */
+/** Active product count + curated cutout photo per category, for the homepage showcase. */
 export async function getCategoryShowcase(): Promise<CategoryShowcaseItem[]> {
   const categories = await db.category.findMany({ orderBy: { position: "asc" } });
 
   return Promise.all(
     categories.map(async (category) => {
-      const pinnedSlug = PINNED_SHOWCASE_PRODUCTS[category.slug];
-      const [productCount, pinned, fallback] = await Promise.all([
-        db.product.count({ where: { categoryId: category.id, active: true } }),
-        pinnedSlug
-          ? db.product.findFirst({
-              where: { slug: pinnedSlug, active: true },
-              include: { images: { orderBy: { position: "asc" }, take: 1 } },
-            })
-          : null,
-        db.product.findFirst({
-          where: { categoryId: category.id, active: true },
-          orderBy: [{ featured: "desc" }, { id: "asc" }],
-          include: { images: { orderBy: { position: "asc" }, take: 1 } },
-        }),
-      ]);
-
-      const representative = pinned ?? fallback;
+      const productCount = await db.product.count({ where: { categoryId: category.id, active: true } });
 
       return {
         slug: category.slug,
         name: category.name,
         productCount,
-        image: representative?.images[0]?.url ?? category.image,
+        image: SHOWCASE_IMAGES[category.slug] ?? category.image,
       };
     }),
   );
