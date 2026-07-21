@@ -44,6 +44,9 @@ model Product {
   isNew               Boolean  @default(false)
   isBestSeller        Boolean  @default(false)
   nutritionFacts      String? // JSON-encoded string: { serving, calories, protein, carbs, fat, ... }
+  // Soft-delete flag: set to false when the product is removed in TiendaNube,
+  // since it can't be hard-deleted once it has OrderItem history.
+  active              Boolean  @default(true)
   tiendaNubeProductId Int?
   tiendaNubeVariantId Int?
   createdAt           DateTime @default(now())

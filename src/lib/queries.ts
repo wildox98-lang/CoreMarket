@@ -64,7 +64,7 @@ export function toProductCard(product: ProductWithCardData): ProductCard {
 /** Pass a brandSlug to only return categories that have products from that brand. */
 export async function getCategories(brandSlug?: string) {
   return db.category.findMany({
-    where: brandSlug ? { products: { some: { brand: { slug: brandSlug } } } } : undefined,
+    where: brandSlug ? { products: { some: { active: true, brand: { slug: brandSlug } } } } : undefined,
     orderBy: { position: "asc" },
   });
 }
@@ -72,14 +72,14 @@ export async function getCategories(brandSlug?: string) {
 /** Pass a categorySlug to only return brands that have products in that category. */
 export async function getBrands(categorySlug?: string) {
   return db.brand.findMany({
-    where: categorySlug ? { products: { some: { category: { slug: categorySlug } } } } : undefined,
+    where: categorySlug ? { products: { some: { active: true, category: { slug: categorySlug } } } } : undefined,
     orderBy: { name: "asc" },
   });
 }
 
 export async function getProductBySlug(slug: string) {
   const product = await db.product.findUnique({
-    where: { slug },
+    where: { slug, active: true },
     include: {
       images: { orderBy: { position: "asc" } },
       reviews: { orderBy: { createdAt: "desc" } },
@@ -92,7 +92,7 @@ export async function getProductBySlug(slug: string) {
 
 export async function getRelatedProducts(categoryId: string, excludeId: string, take = 4) {
   const products = await db.product.findMany({
-    where: { categoryId, id: { not: excludeId } },
+    where: { categoryId, id: { not: excludeId }, active: true },
     include: productCardInclude,
     take,
   });
@@ -111,7 +111,7 @@ export type ProductFilters = {
 const PAGE_SIZE = 12;
 
 export async function getFilteredProducts(filters: ProductFilters) {
-  const where: Prisma.ProductWhereInput = {};
+  const where: Prisma.ProductWhereInput = { active: true };
 
   if (filters.q) {
     where.OR = [

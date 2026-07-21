@@ -1,3 +1,5 @@
+import { db } from "@/lib/db";
+
 const API_VERSION = "2025-03";
 const USER_AGENT = "Core Market (hola@coremarket.com.ar)";
 
@@ -97,7 +99,16 @@ export async function createTiendaNubeOrder(order: {
 
 type TiendaNubeProductDetail = {
   id: number;
-  variants: { id: number; price: string | null; stock: number | null; stock_management: boolean }[];
+  name: { es?: string; pt?: string };
+  brand: string | null;
+  categories: { id: number; name: { es?: string; pt?: string } }[];
+  variants: {
+    id: number;
+    price: string | null;
+    stock: number | null;
+    stock_management: boolean;
+    sku: string | null;
+  }[];
   images: { id: number; src: string; position: number }[];
 };
 
@@ -145,6 +156,113 @@ export function buildLocalUpdateFromTiendaNube(product: TiendaNubeProductDetail,
           },
         }
       : {}),
+  };
+}
+
+function slugify(text: string) {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+async function generateUniqueProductSlug(name: string) {
+  const base = slugify(name) || "producto";
+  let slug = base;
+  let i = 2;
+  while (await db.product.findUnique({ where: { slug } })) {
+    slug = `${base}-${i}`;
+    i++;
+  }
+  return slug;
+}
+
+/** Best-effort match of a TiendaNube category to one of our own Category rows, falling back to the first (lowest-position) local category. */
+async function resolveLocalCategoryId(product: TiendaNubeProductDetail) {
+  const tnCategoryName = product.categories[0]?.name.es?.trim();
+  if (tnCategoryName) {
+    const match = await db.category.findFirst({
+      where: { name: { equals: tnCategoryName, mode: "insensitive" } },
+    });
+    if (match) return match.id;
+  }
+  const fallback = await db.category.findFirst({ orderBy: { position: "asc" } });
+  if (!fallback) throw new Error("No hay categorías locales configuradas");
+  return fallback.id;
+}
+
+/** Best-effort match (or creation) of a Brand for a TiendaNube product's `brand` field, falling back to "Sin Marca". */
+async function resolveLocalBrandId(product: TiendaNubeProductDetail) {
+  const brandName = product.brand?.trim();
+  if (!brandName) {
+    const sinMarca = await db.brand.findUnique({ where: { slug: "sin-marca" } });
+    if (sinMarca) return sinMarca.id;
+  } else {
+    const match = await db.brand.findFirst({ where: { name: { equals: brandName, mode: "insensitive" } } });
+    if (match) return match.id;
+    const slug = await (async () => {
+      const base = slugify(brandName) || "marca";
+      let candidate = base;
+      let i = 2;
+      while (await db.brand.findUnique({ where: { slug: candidate } })) {
+        candidate = `${base}-${i}`;
+        i++;
+      }
+      return candidate;
+    })();
+    const created = await db.brand.create({
+      data: { slug, name: brandName, logo: `https://picsum.photos/seed/brand-${slug}/200/200` },
+    });
+    return created.id;
+  }
+  const fallback = await db.brand.findFirst({ orderBy: { name: "asc" } });
+  if (!fallback) throw new Error("No hay marcas locales configuradas");
+  return fallback.id;
+}
+
+/**
+ * Builds a Prisma `Product.create` data object for a TiendaNube product that
+ * has no local counterpart yet (used by the product/created webhook when the
+ * merchant adds a brand-new product directly in TiendaNube). Resolves/creates
+ * the local category and brand on a best-effort basis.
+ */
+export async function buildLocalCreateFromTiendaNube(product: TiendaNubeProductDetail) {
+  const name = product.name.es?.trim() || product.name.pt?.trim() || `Producto TiendaNube ${product.id}`;
+  const [categoryId, brandId] = await Promise.all([
+    resolveLocalCategoryId(product),
+    resolveLocalBrandId(product),
+  ]);
+  const [category, brand] = await Promise.all([
+    db.category.findUnique({ where: { id: categoryId } }),
+    db.brand.findUnique({ where: { id: brandId } }),
+  ]);
+  const brandName = brand?.name ?? "Sin Marca";
+  const categoryName = category?.name ?? "";
+
+  const variant = product.variants[0];
+  const priceStock = readVariantPriceStock(product);
+  const images = readProductImages(product) ?? [];
+
+  let sku = variant?.sku?.trim() || null;
+  if (sku && (await db.product.findUnique({ where: { sku } }))) {
+    sku = null;
+  }
+
+  return {
+    slug: await generateUniqueProductSlug(name),
+    sku,
+    name,
+    shortDescription: brandName === "Sin Marca" ? categoryName : `${brandName} · ${categoryName}`,
+    description: `${name}${brandName === "Sin Marca" ? "" : ` de ${brandName}`}. Disponible en Core Market.`,
+    price: priceStock?.price ?? 0,
+    stock: priceStock?.stock ?? 0,
+    tiendaNubeProductId: product.id,
+    tiendaNubeVariantId: variant?.id ?? null,
+    categoryId,
+    brandId,
+    images: { create: images.map((url, i) => ({ url, alt: name, position: i })) },
   };
 }
 
