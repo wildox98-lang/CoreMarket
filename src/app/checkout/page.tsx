@@ -16,7 +16,9 @@ export default function CheckoutPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<"mercadopago" | "tiendanube">("mercadopago");
+  const [paymentMethod, setPaymentMethod] = useState<"mercadopago" | "tiendanube" | "local">(
+    "mercadopago",
+  );
 
   const total = subtotal;
 
@@ -128,6 +130,13 @@ export default function CheckoutPage() {
               title="Tarjeta, MODO o transferencia"
               description="Te lleva a una página segura para elegir el medio de pago."
             />
+            <PaymentOption
+              value="local"
+              selected={paymentMethod === "local"}
+              onSelect={setPaymentMethod}
+              title="Arreglo en el local"
+              description="Te redirigimos a WhatsApp para coordinar cómo pagás cuando retirás tu pedido."
+            />
           </fieldset>
 
           {error && (
@@ -189,9 +198,9 @@ function PaymentOption({
   title,
   description,
 }: {
-  value: "mercadopago" | "tiendanube";
+  value: "mercadopago" | "tiendanube" | "local";
   selected: boolean;
-  onSelect: (value: "mercadopago" | "tiendanube") => void;
+  onSelect: (value: "mercadopago" | "tiendanube" | "local") => void;
   title: string;
   description: string;
 }) {

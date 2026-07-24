@@ -3,13 +3,14 @@ import { Preference } from "mercadopago";
 import { db } from "@/lib/db";
 import { getMercadoPagoConfig, getSiteUrl, isMercadoPagoConfigured } from "@/lib/mercadopago";
 import { createTiendaNubeDraftOrder, isTiendaNubeConfigured } from "@/lib/tiendanube";
+import { buildWhatsappUrl } from "@/lib/constants";
 
 type CheckoutBody = {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
   notes?: string;
-  paymentMethod?: "mercadopago" | "tiendanube";
+  paymentMethod?: "mercadopago" | "tiendanube" | "local";
   items: { productId: string; quantity: number }[];
 };
 
@@ -68,7 +69,10 @@ export async function POST(request: Request) {
 
   const subtotal = orderItems.reduce((sum, i) => sum + i.subtotal, 0);
   const total = subtotal;
-  const paymentMethod = body.paymentMethod === "tiendanube" ? "tiendanube" : "mercadopago";
+  const paymentMethod =
+    body.paymentMethod === "tiendanube" || body.paymentMethod === "local"
+      ? body.paymentMethod
+      : "mercadopago";
 
   const order = await db.order.create({
     data: {
@@ -85,6 +89,11 @@ export async function POST(request: Request) {
       items: { create: orderItems },
     },
   });
+
+  if (paymentMethod === "local") {
+    const message = `Hola! Quiero coordinar el pago de mi pedido #${order.id.slice(-8)} (retiro y pago en el local).`;
+    return NextResponse.json({ orderId: order.id, checkoutUrl: buildWhatsappUrl(message) });
+  }
 
   if (paymentMethod === "tiendanube") {
     if (!isTiendaNubeConfigured()) {
