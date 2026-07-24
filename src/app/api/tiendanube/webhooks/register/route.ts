@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 import { isTiendaNubeConfigured, tiendaNubeFetch } from "@/lib/tiendanube";
 
-const WEBHOOK_URL = "https://www.coremarket.com.ar/api/tiendanube/webhooks/product";
-const REQUIRED_EVENTS = ["product/created", "product/updated", "product/deleted"];
+const BASE_URL = "https://www.coremarket.com.ar/api/tiendanube/webhooks";
+const REQUIRED: { event: string; url: string }[] = [
+  { event: "product/created", url: `${BASE_URL}/product` },
+  { event: "product/updated", url: `${BASE_URL}/product` },
+  { event: "product/deleted", url: `${BASE_URL}/product` },
+  { event: "order/paid", url: `${BASE_URL}/order` },
+  { event: "order/cancelled", url: `${BASE_URL}/order` },
+];
 
 function requireAuthorized(request: Request) {
   const secret = process.env.TIENDANUBE_SYNC_SECRET;
@@ -12,7 +18,7 @@ function requireAuthorized(request: Request) {
 
 type TiendaNubeWebhook = { id: number; event: string; url: string };
 
-/** Registers any of REQUIRED_EVENTS that aren't already pointed at our webhook URL. Safe to call repeatedly. */
+/** Registers any of REQUIRED that aren't already pointed at their webhook URL. Safe to call repeatedly. */
 export async function POST(request: Request) {
   if (!requireAuthorized(request)) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
@@ -23,20 +29,23 @@ export async function POST(request: Request) {
 
   const existing = (await tiendaNubeFetch("/webhooks")) as TiendaNubeWebhook[];
 
-  const missing = REQUIRED_EVENTS.filter(
-    (event) => !existing.some((w) => w.event === event && w.url === WEBHOOK_URL),
+  const missing = REQUIRED.filter(
+    (req) => !existing.some((w) => w.event === req.event && w.url === req.url),
   );
 
   const created: TiendaNubeWebhook[] = [];
-  for (const event of missing) {
+  for (const req of missing) {
     const webhook = (await tiendaNubeFetch("/webhooks", {
       method: "POST",
-      body: JSON.stringify({ event, url: WEBHOOK_URL }),
+      body: JSON.stringify(req),
     })) as TiendaNubeWebhook;
     created.push(webhook);
   }
 
-  return NextResponse.json({ created, alreadyRegistered: REQUIRED_EVENTS.filter((e) => !missing.includes(e)) });
+  return NextResponse.json({
+    created,
+    alreadyRegistered: REQUIRED.filter((r) => !missing.includes(r)).map((r) => r.event),
+  });
 }
 
 export async function GET(request: Request) {

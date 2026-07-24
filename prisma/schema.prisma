@@ -87,6 +87,8 @@ model Order {
   status      String @default("pending")
   // fulfillment: delivery | pickup
   fulfillment String
+  // paymentMethod: mercadopago | tiendanube (Pago Nube, MODO, tarjetas via TiendaNube's own checkout)
+  paymentMethod String @default("mercadopago")
 
   customerName  String
   customerEmail String

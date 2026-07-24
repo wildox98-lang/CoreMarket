@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import { Preference } from "mercadopago";
 import { db } from "@/lib/db";
 import { getMercadoPagoConfig, getSiteUrl, isMercadoPagoConfigured } from "@/lib/mercadopago";
+import { createTiendaNubeDraftOrder, isTiendaNubeConfigured } from "@/lib/tiendanube";
 
 type CheckoutBody = {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
   notes?: string;
+  paymentMethod?: "mercadopago" | "tiendanube";
   items: { productId: string; quantity: number }[];
 };
 
@@ -66,11 +68,13 @@ export async function POST(request: Request) {
 
   const subtotal = orderItems.reduce((sum, i) => sum + i.subtotal, 0);
   const total = subtotal;
+  const paymentMethod = body.paymentMethod === "tiendanube" ? "tiendanube" : "mercadopago";
 
   const order = await db.order.create({
     data: {
       status: "pending",
       fulfillment: "pickup",
+      paymentMethod,
       customerName: body.customerName,
       customerEmail: body.customerEmail,
       customerPhone: body.customerPhone,
@@ -81,6 +85,40 @@ export async function POST(request: Request) {
       items: { create: orderItems },
     },
   });
+
+  if (paymentMethod === "tiendanube") {
+    if (!isTiendaNubeConfigured()) {
+      return NextResponse.json({ orderId: order.id, checkoutUrl: null });
+    }
+
+    try {
+      const draftOrder = await createTiendaNubeDraftOrder({
+        customerName: body.customerName,
+        customerEmail: body.customerEmail,
+        customerPhone: body.customerPhone,
+        id: order.id,
+        items: orderItems.map((item) => ({
+          quantity: item.quantity,
+          product: { tiendaNubeVariantId: productMap.get(item.productId)?.tiendaNubeVariantId ?? null },
+        })),
+      });
+
+      await db.order.update({
+        where: { id: order.id },
+        data: { tiendaNubeOrderId: String(draftOrder.id) },
+      });
+
+      return NextResponse.json({ orderId: order.id, checkoutUrl: draftOrder.checkout_url });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error("TiendaNube draft order creation failed", error);
+      await db.order.update({
+        where: { id: order.id },
+        data: { tiendaNubeSyncError: message.slice(0, 2000) },
+      });
+      return NextResponse.json({ orderId: order.id, checkoutUrl: null });
+    }
+  }
 
   if (!isMercadoPagoConfigured()) {
     return NextResponse.json({ orderId: order.id, checkoutUrl: null });

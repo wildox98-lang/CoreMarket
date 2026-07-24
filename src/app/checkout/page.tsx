@@ -16,6 +16,7 @@ export default function CheckoutPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"mercadopago" | "tiendanube">("mercadopago");
 
   const total = subtotal;
 
@@ -35,6 +36,7 @@ export default function CheckoutPage() {
           customerEmail: formData.get("customerEmail"),
           customerPhone: formData.get("customerPhone"),
           notes: formData.get("notes") || undefined,
+          paymentMethod,
           items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
         }),
       });
@@ -108,6 +110,26 @@ export default function CheckoutPage() {
             </label>
           </fieldset>
 
+          <fieldset className="flex flex-col gap-3">
+            <legend className="mb-1 font-sans text-sm font-semibold text-olive-900">
+              Cómo querés pagar
+            </legend>
+            <PaymentOption
+              value="mercadopago"
+              selected={paymentMethod === "mercadopago"}
+              onSelect={setPaymentMethod}
+              title="Mercado Pago"
+              description="Saldo en cuenta, tarjeta de crédito o débito."
+            />
+            <PaymentOption
+              value="tiendanube"
+              selected={paymentMethod === "tiendanube"}
+              onSelect={setPaymentMethod}
+              title="Tarjeta, MODO o transferencia"
+              description="Te lleva a una página segura para elegir el medio de pago."
+            />
+          </fieldset>
+
           {error && (
             <p role="alert" className="rounded-xl bg-destructive/10 px-4 py-3 font-sans text-sm text-destructive">
               {error}
@@ -157,6 +179,41 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function PaymentOption({
+  value,
+  selected,
+  onSelect,
+  title,
+  description,
+}: {
+  value: "mercadopago" | "tiendanube";
+  selected: boolean;
+  onSelect: (value: "mercadopago" | "tiendanube") => void;
+  title: string;
+  description: string;
+}) {
+  return (
+    <label
+      className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 transition-colors ${
+        selected ? "border-olive-700 bg-olive-700/5" : "border-border bg-cream"
+      }`}
+    >
+      <input
+        type="radio"
+        name="paymentMethod"
+        value={value}
+        checked={selected}
+        onChange={() => onSelect(value)}
+        className="mt-1 accent-olive-700"
+      />
+      <span className="flex flex-col gap-0.5">
+        <span className="font-sans text-sm font-medium text-olive-900">{title}</span>
+        <span className="font-sans text-xs text-olive-500">{description}</span>
+      </span>
+    </label>
   );
 }
 

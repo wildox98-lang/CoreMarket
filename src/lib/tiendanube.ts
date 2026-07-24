@@ -97,6 +97,45 @@ export async function createTiendaNubeOrder(order: {
   }) as Promise<{ id: number }>;
 }
 
+/**
+ * Creates a Draft Order in TiendaNube with payment_status "unpaid" and
+ * returns its checkout_url — a TiendaNube-hosted checkout page where the
+ * customer can pay with whatever the store has configured there (Pago
+ * Nube: cards, MODO, transfer). Once the customer completes payment there,
+ * TiendaNube converts the draft into a real Order (same id) and fires
+ * order/paid, which src/app/api/tiendanube/webhooks/order listens for.
+ */
+export async function createTiendaNubeDraftOrder(order: {
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  id: string;
+  items: { quantity: number; product: { tiendaNubeVariantId: number | null } }[];
+}) {
+  const products = order.items
+    .filter((item) => item.product.tiendaNubeVariantId != null)
+    .map((item) => ({ variant_id: item.product.tiendaNubeVariantId, quantity: item.quantity }));
+
+  if (products.length === 0) {
+    throw new Error("Ninguno de los productos del pedido está sincronizado con TiendaNube");
+  }
+
+  const { first_name, last_name } = splitName(order.customerName);
+
+  return tiendaNubeFetch("/draft_orders", {
+    method: "POST",
+    body: JSON.stringify({
+      contact_name: first_name,
+      contact_lastname: last_name,
+      contact_email: order.customerEmail,
+      contact_phone: order.customerPhone,
+      payment_status: "unpaid",
+      products,
+      note: `Pedido de coremarket.com.ar #${order.id} — retira en el local`,
+    }),
+  }) as Promise<{ id: number; checkout_url: string }>;
+}
+
 export type TiendaNubeProductDetail = {
   id: number;
   name: { es?: string; pt?: string };
