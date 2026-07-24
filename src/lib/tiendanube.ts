@@ -41,16 +41,19 @@ function splitName(fullName: string) {
   };
 }
 
-export async function createTiendaNubeOrder(order: {
-  customerName: string;
-  customerEmail: string;
-  customerPhone: string;
-  address: string | null;
-  city: string | null;
-  fulfillment: string;
-  id: string;
-  items: { quantity: number; product: { tiendaNubeVariantId: number | null } }[];
-}) {
+export async function createTiendaNubeOrder(
+  order: {
+    customerName: string;
+    customerEmail: string;
+    customerPhone: string;
+    address: string | null;
+    city: string | null;
+    fulfillment: string;
+    id: string;
+    items: { quantity: number; product: { tiendaNubeVariantId: number | null } }[];
+  },
+  options?: { paymentStatus?: "paid" | "pending"; gateway?: string },
+) {
   const products = order.items
     .filter((item) => item.product.tiendaNubeVariantId != null)
     .map((item) => ({ variant_id: item.product.tiendaNubeVariantId, quantity: item.quantity }));
@@ -75,8 +78,8 @@ export async function createTiendaNubeOrder(order: {
   return tiendaNubeFetch("/orders", {
     method: "POST",
     body: JSON.stringify({
-      gateway: "mercadopago",
-      payment_status: "paid",
+      gateway: options?.gateway ?? "mercadopago",
+      payment_status: options?.paymentStatus ?? "paid",
       status: "open",
       inventory_behaviour: "claim",
       products,
@@ -94,7 +97,7 @@ export async function createTiendaNubeOrder(order: {
       send_confirmation_email: false,
       send_fulfillment_email: false,
     }),
-  }) as Promise<{ id: number }>;
+  }) as Promise<{ id: number; number: number }>;
 }
 
 /**

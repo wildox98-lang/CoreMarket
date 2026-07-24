@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { Preference } from "mercadopago";
 import { db } from "@/lib/db";
 import { getMercadoPagoConfig, getSiteUrl, isMercadoPagoConfigured } from "@/lib/mercadopago";
-import { createTiendaNubeDraftOrder, isTiendaNubeConfigured } from "@/lib/tiendanube";
+import { createTiendaNubeDraftOrder, createTiendaNubeOrder, isTiendaNubeConfigured } from "@/lib/tiendanube";
 import { buildWhatsappUrl } from "@/lib/constants";
 
 type CheckoutBody = {
@@ -91,8 +91,46 @@ export async function POST(request: Request) {
   });
 
   if (paymentMethod === "local") {
-    const message = `Hola! Quiero coordinar el pago de mi pedido #${order.id.slice(-8)} (retiro y pago en el local).`;
-    return NextResponse.json({ orderId: order.id, checkoutUrl: buildWhatsappUrl(message) });
+    const fallbackMessage = `Hola! Quiero coordinar el pago de mi pedido #${order.id.slice(-8)} (retiro y pago en el local).`;
+
+    if (!isTiendaNubeConfigured()) {
+      return NextResponse.json({ orderId: order.id, checkoutUrl: buildWhatsappUrl(fallbackMessage) });
+    }
+
+    try {
+      const tnOrder = await createTiendaNubeOrder(
+        {
+          customerName: body.customerName,
+          customerEmail: body.customerEmail,
+          customerPhone: body.customerPhone,
+          address: null,
+          city: null,
+          fulfillment: "pickup",
+          id: order.id,
+          items: orderItems.map((item) => ({
+            quantity: item.quantity,
+            product: { tiendaNubeVariantId: productMap.get(item.productId)?.tiendaNubeVariantId ?? null },
+          })),
+        },
+        { paymentStatus: "pending", gateway: "efectivo" },
+      );
+
+      await db.order.update({
+        where: { id: order.id },
+        data: { tiendaNubeOrderId: String(tnOrder.id) },
+      });
+
+      const message = `Hola! Quiero coordinar el pago de mi pedido #${tnOrder.number} (retiro y pago en el local).`;
+      return NextResponse.json({ orderId: order.id, checkoutUrl: buildWhatsappUrl(message) });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error("TiendaNube order creation failed (pago en el local)", error);
+      await db.order.update({
+        where: { id: order.id },
+        data: { tiendaNubeSyncError: message.slice(0, 2000) },
+      });
+      return NextResponse.json({ orderId: order.id, checkoutUrl: buildWhatsappUrl(fallbackMessage) });
+    }
   }
 
   if (paymentMethod === "tiendanube") {
