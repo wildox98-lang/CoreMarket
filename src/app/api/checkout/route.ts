@@ -112,7 +112,7 @@ export async function POST(request: Request) {
             product: { tiendaNubeVariantId: productMap.get(item.productId)?.tiendaNubeVariantId ?? null },
           })),
         },
-        { paymentStatus: "pending", gateway: "efectivo" },
+        { paymentStatus: "pending", gateway: "offline" },
       );
 
       await db.order.update({
