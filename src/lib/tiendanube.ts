@@ -383,6 +383,32 @@ export async function findTiendaNubeProductBySku(sku: string) {
   return response.json() as Promise<TiendaNubeProductDetail>;
 }
 
+export type TiendaNubeCoupon = {
+  id: number;
+  code: string;
+  type: "percentage" | "absolute" | "shipping";
+  value: string | null;
+  valid: boolean;
+  used: number | null;
+  max_uses: number | null;
+  start_date: string | null;
+  end_date: string | null;
+  min_price: number | null;
+  includes_shipping: boolean;
+  first_consumer_purchase: boolean;
+  categories: { id: number; name: { es?: string; pt?: string } }[] | null;
+  products: { id: number; name: { es?: string; pt?: string } }[] | null;
+};
+
+/** Looks up a coupon by its exact code (case-insensitive). Returns null if none matches. */
+export async function getTiendaNubeCouponByCode(code: string) {
+  const results = (await tiendaNubeFetch(
+    `/coupons?q=${encodeURIComponent(code)}`,
+  )) as TiendaNubeCoupon[];
+  const normalized = code.trim().toLowerCase();
+  return results.find((c) => c.code.trim().toLowerCase() === normalized) ?? null;
+}
+
 export async function tiendaNubeFetch(path: string, init?: RequestInit) {
   const accessToken = process.env.TIENDANUBE_ACCESS_TOKEN;
   const storeId = process.env.TIENDANUBE_STORE_ID;
