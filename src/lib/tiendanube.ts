@@ -50,13 +50,17 @@ export async function createTiendaNubeOrder(
     city: string | null;
     fulfillment: string;
     id: string;
-    items: { quantity: number; product: { tiendaNubeVariantId: number | null } }[];
+    items: { quantity: number; price?: number; product: { tiendaNubeVariantId: number | null } }[];
   },
-  options?: { paymentStatus?: "paid" | "pending"; gateway?: string },
+  options?: { paymentStatus?: "paid" | "pending"; gateway?: string; total?: number },
 ) {
   const products = order.items
     .filter((item) => item.product.tiendaNubeVariantId != null)
-    .map((item) => ({ variant_id: item.product.tiendaNubeVariantId, quantity: item.quantity }));
+    .map((item) => ({
+      variant_id: item.product.tiendaNubeVariantId,
+      quantity: item.quantity,
+      ...(item.price != null ? { price: item.price.toFixed(2) } : {}),
+    }));
 
   if (products.length === 0) {
     throw new Error("Ninguno de los productos del pedido está sincronizado con TiendaNube");
@@ -83,6 +87,7 @@ export async function createTiendaNubeOrder(
       status: "open",
       inventory_behaviour: "claim",
       products,
+      ...(options?.total != null ? { total: options.total.toFixed(2) } : {}),
       customer: {
         name: order.customerName,
         email: order.customerEmail,
@@ -114,6 +119,8 @@ export async function createTiendaNubeDraftOrder(order: {
   customerPhone: string;
   id: string;
   items: { quantity: number; product: { tiendaNubeVariantId: number | null } }[];
+  /** Absolute peso discount already validated against a TiendaNube coupon. */
+  discount?: number;
 }) {
   const products = order.items
     .filter((item) => item.product.tiendaNubeVariantId != null)
@@ -134,6 +141,7 @@ export async function createTiendaNubeDraftOrder(order: {
       contact_phone: order.customerPhone,
       payment_status: "unpaid",
       products,
+      ...(order.discount ? { discount: order.discount.toFixed(2), discount_type: "absolute" } : {}),
       note: `Pedido de coremarket.com.ar #${order.id} — retira en el local`,
     }),
   }) as Promise<{ id: number; checkout_url: string }>;
