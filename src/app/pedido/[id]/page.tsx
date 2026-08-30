@@ -97,6 +97,12 @@ export default async function OrderConfirmationPage({
               {order.shipping === 0 ? "Gratis" : formatPrice(order.shipping)}
             </span>
           </div>
+          {order.discount > 0 && (
+            <div className="flex justify-between text-olive-700">
+              <span>Descuento{order.couponCode ? ` (${order.couponCode})` : ""}</span>
+              <span className="tabular-nums">-{formatPrice(order.discount)}</span>
+            </div>
+          )}
           <div className="flex justify-between border-t border-border pt-3 font-semibold text-olive-900">
             <span>Total</span>
             <span className="tabular-nums">{formatPrice(order.total)}</span>
