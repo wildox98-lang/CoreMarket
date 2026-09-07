@@ -37,6 +37,24 @@ export async function GET(request: Request) {
     return NextResponse.json({ count: products.length, products });
   }
 
+  if (url.searchParams.get("externalimages") === "true") {
+    const products = await db.product.findMany({
+      where: {
+        active: true,
+        images: { some: { url: { not: { contains: "mitiendanube.com" } } } },
+      },
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        tiendaNubeProductId: true,
+        images: { select: { url: true }, orderBy: { position: "asc" }, take: 1 },
+      },
+      orderBy: { name: "asc" },
+    });
+    return NextResponse.json({ count: products.length, products });
+  }
+
   if (url.searchParams.get("dupes") === "true") {
     const all = await db.product.findMany({
       select: { id: true, slug: true, sku: true, name: true, price: true, brandId: true },
