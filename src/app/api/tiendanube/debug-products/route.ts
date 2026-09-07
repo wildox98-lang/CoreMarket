@@ -15,6 +15,15 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
 
+  if (url.searchParams.get("noimages") === "true") {
+    const products = await db.product.findMany({
+      where: { active: true, tiendaNubeProductId: { not: null }, images: { none: {} } },
+      select: { id: true, slug: true, name: true, tiendaNubeProductId: true },
+      orderBy: { name: "asc" },
+    });
+    return NextResponse.json({ count: products.length, products });
+  }
+
   if (url.searchParams.get("dupes") === "true") {
     const all = await db.product.findMany({
       select: { id: true, slug: true, sku: true, name: true, price: true, brandId: true },
