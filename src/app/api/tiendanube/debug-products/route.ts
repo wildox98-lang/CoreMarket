@@ -24,6 +24,19 @@ export async function GET(request: Request) {
     return NextResponse.json({ count: products.length, products });
   }
 
+  if (url.searchParams.get("placeholders") === "true") {
+    const products = await db.product.findMany({
+      where: {
+        active: true,
+        tiendaNubeProductId: { not: null },
+        images: { some: { url: { contains: "picsum.photos" } } },
+      },
+      select: { id: true, slug: true, name: true, tiendaNubeProductId: true },
+      orderBy: { name: "asc" },
+    });
+    return NextResponse.json({ count: products.length, products });
+  }
+
   if (url.searchParams.get("dupes") === "true") {
     const all = await db.product.findMany({
       select: { id: true, slug: true, sku: true, name: true, price: true, brandId: true },
