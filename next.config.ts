@@ -2,6 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Product photos come straight from TiendaNube's own CDN (already sized/
+    // compressed there), and this catalog has hundreds of distinct images —
+    // running them all through Vercel's paid image optimizer blew past its
+    // quota (requests started failing with 402 Payment Required). Serving
+    // them unoptimized avoids that entirely, at the cost of Vercel-side
+    // resizing/format conversion, which these sources don't need anyway.
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "images.unsplash.com" },
