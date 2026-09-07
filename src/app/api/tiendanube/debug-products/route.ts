@@ -42,6 +42,7 @@ export async function GET(request: Request) {
       brandId: true,
       tiendaNubeProductId: true,
       tiendaNubeVariantId: true,
+      active: true,
       createdAt: true,
     },
     orderBy: { name: "asc" },
