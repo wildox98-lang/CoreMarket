@@ -94,6 +94,7 @@ const SHOWCASE_IMAGES: Record<string, string> = {
   congelados: "/category-showcase/congelados.png",
   "semillas-frutos-secos-cereales": "/category-showcase/semillas-frutos-secos-cereales.png",
   "suplementos-deportivos": "/category-showcase/suplementos-deportivos.png",
+  "refrigerados": "/category-showcase/refrigerados.png",
   "endulzantes-y-dulces": "/category-showcase/endulzantes-y-dulces.png",
 };
 
