@@ -23,6 +23,7 @@ const CATEGORY_PHOTOS: Record<string, [number, number]> = {
   "semillas-frutos-secos-cereales": [18, 116],
   "suplementos-deportivos": [53, 65],
   "endulzantes-y-dulces": [102, 106],
+  "refrigerados": [63, 30],
 };
 
 // Real product photos, sourced from actual Argentine dietética/retailer
@@ -517,6 +518,7 @@ const categories: CategorySeed[] = [
   { slug: "semillas-frutos-secos-cereales", name: "Semillas, Frutos Secos y Cereales", description: "Semillas, legumbres, harinas, frutos secos, granolas, cereales y arroces a granel.", position: 4 },
   { slug: "suplementos-deportivos", name: "Suplementos Deportivos", description: "Proteínas, creatina y suplementos para tu entrenamiento.", position: 5 },
   { slug: "endulzantes-y-dulces", name: "Endulzantes y Dulces Naturales", description: "Mieles, mermeladas, endulzantes naturales y chocolates.", position: 6 },
+  { slug: "refrigerados", name: "Refrigerados", description: "Lácteos, fiambres, tartas y preparaciones frescas que necesitan frío.", position: 7 },
 ];
 
 type RealProduct = {
