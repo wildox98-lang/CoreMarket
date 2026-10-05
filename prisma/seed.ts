@@ -24,6 +24,7 @@ const CATEGORY_PHOTOS: Record<string, [number, number]> = {
   "suplementos-deportivos": [53, 65],
   "endulzantes-y-dulces": [102, 106],
   "refrigerados": [63, 30],
+  "yogur": [63, 30],
 };
 
 // Real product photos, sourced from actual Argentine dietética/retailer
@@ -519,6 +520,7 @@ const categories: CategorySeed[] = [
   { slug: "suplementos-deportivos", name: "Suplementos Deportivos", description: "Proteínas, creatina y suplementos para tu entrenamiento.", position: 5 },
   { slug: "endulzantes-y-dulces", name: "Endulzantes y Dulces Naturales", description: "Mieles, mermeladas, endulzantes naturales y chocolates.", position: 6 },
   { slug: "refrigerados", name: "Refrigerados", description: "Lácteos, fiambres, tartas y preparaciones frescas que necesitan frío.", position: 7 },
+  { slug: "yogur", name: "Yogur", description: "Yogures y postres lácteos frescos.", position: 8 },
 ];
 
 type RealProduct = {
@@ -690,7 +692,7 @@ export const REAL_BRANDS: { slug: string; name: string }[] = [
   { slug: "dulri", name: "Dulri" },
   { slug: "barra-brava", name: "Barra Brava" },
 ];export const REAL_PRODUCTS: RealProduct[] = [
-  { sku: "7798146450249", slug: "argendiet-alga-nori", name: "Argendiet Alga Nori", categorySlug: "refrigerados", brandSlug: "argendiet", price: 4000, stock: 2, tags: "" },
+  { sku: "7798146450249", slug: "argendiet-alga-nori", name: "Argendiet Alga Nori", categorySlug: "almacen-naturista", brandSlug: "argendiet", price: 4000, stock: 2, tags: "" },
   { sku: "7798146450287", slug: "argendiet-alga-para-sushi-x6u", name: "Argendiet Alga para Sushi x6u", categorySlug: "almacen-naturista", brandSlug: "argendiet", price: 11000, stock: 3, tags: "" },
   { sku: "7798126290940", slug: "arytza-mayonesa-con-ajo", name: "Arytza Mayonesa con Ajo", categorySlug: "almacen-naturista", brandSlug: "arytza", price: 7770, stock: 3, tags: "" },
   { sku: "7798126291053", slug: "arytza-mostaza-con-miel", name: "Arytza Mostaza con Miel", categorySlug: "almacen-naturista", brandSlug: "arytza", price: 6650, stock: 3, tags: "" },
