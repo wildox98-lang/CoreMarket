@@ -25,6 +25,7 @@ const CATEGORY_PHOTOS: Record<string, [number, number]> = {
   "endulzantes-y-dulces": [102, 106],
   "refrigerados": [63, 30],
   "yogur": [63, 30],
+  "cosmetica": [63, 30],
 };
 
 // Real product photos, sourced from actual Argentine dietética/retailer
@@ -521,6 +522,7 @@ const categories: CategorySeed[] = [
   { slug: "endulzantes-y-dulces", name: "Endulzantes y Dulces Naturales", description: "Mieles, mermeladas, endulzantes naturales y chocolates.", position: 6 },
   { slug: "refrigerados", name: "Refrigerados", description: "Lácteos, fiambres, tartas y preparaciones frescas que necesitan frío.", position: 7 },
   { slug: "yogur", name: "Yogur", description: "Yogures y postres lácteos frescos.", position: 8 },
+  { slug: "cosmetica", name: "Cosmética", description: "Cosmética natural: desodorantes, cuidado de la piel y más.", position: 9 },
 ];
 
 type RealProduct = {
