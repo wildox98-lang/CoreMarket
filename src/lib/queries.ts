@@ -97,6 +97,7 @@ const SHOWCASE_IMAGES: Record<string, string> = {
   "refrigerados": "/category-showcase/refrigerados.png",
   "yogur": "/category-showcase/yogur.png",
   "cosmetica": "/category-showcase/cosmetica.png",
+  "te-y-yerba": "/category-showcase/te-y-yerba.png",
   "endulzantes-y-dulces": "/category-showcase/endulzantes-y-dulces.png",
 };
 
