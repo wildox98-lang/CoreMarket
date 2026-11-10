@@ -245,6 +245,16 @@ async function generateUniqueProductSlug(name: string) {
   return slug;
 }
 
+/** Como resolveLocalCategoryId, pero devuelve null (sin caer en la primera categoría) si la de TiendaNube no coincide con ninguna local, para que una actualización nunca mueva un producto a otra categoría por error. */
+async function findMatchingLocalCategoryId(product: TiendaNubeProductDetail) {
+  const tnCategoryName = product.categories[0]?.name.es?.trim();
+  if (!tnCategoryName) return null;
+  const match = await db.category.findFirst({
+    where: { name: { equals: tnCategoryName, mode: "insensitive" } },
+  });
+  return match?.id ?? null;
+}
+
 /** Best-effort match of a TiendaNube category to one of our own Category rows, falling back to the first (lowest-position) local category. */
 async function resolveLocalCategoryId(product: TiendaNubeProductDetail) {
   const tnCategoryName = product.categories[0]?.name.es?.trim();
@@ -360,11 +370,28 @@ export async function syncLocalProductFromTiendaNube(tnProduct: TiendaNubeProduc
     }
   }
 
-  if (product) {
+ if (product) {
     const data = buildLocalUpdateFromTiendaNube(tnProduct, product.name);
-    return db.product.update({ where: { id: product.id }, data: { ...data, active: true } });
-  }
 
+    const categoryData: { categoryId?: string; shortDescription?: string } = {};
+    const newCategoryId = await findMatchingLocalCategoryId(tnProduct);
+    if (newCategoryId && newCategoryId !== product.categoryId) {
+      const [category, brand] = await Promise.all([
+        db.category.findUnique({ where: { id: newCategoryId } }),
+        db.brand.findUnique({ where: { id: product.brandId } }),
+      ]);
+      const brandName = brand?.name ?? "Sin Marca";
+      const categoryName = category?.name ?? "";
+      categoryData.categoryId = newCategoryId;
+      categoryData.shortDescription =
+        brandName === "Sin Marca" ? categoryName : `${brandName} · ${categoryName}`;
+    }
+
+    return db.product.update({
+      where: { id: product.id },
+      data: { ...data, ...categoryData, active: true },
+    });
+  }
   const createData = await buildLocalCreateFromTiendaNube(tnProduct);
   return db.product.create({ data: createData });
 }
