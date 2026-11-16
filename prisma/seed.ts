@@ -28,6 +28,7 @@ const CATEGORY_PHOTOS: Record<string, [number, number]> = {
   "cosmetica": [63, 30],
   "te-y-yerba": [63, 30],
   "galletitas": [63, 30],
+  "gourmet": [63, 30],
 };
 
 // Real product photos, sourced from actual Argentine dietética/retailer
@@ -518,7 +519,8 @@ type CategorySeed = {
 const categories: CategorySeed[] = [
   { slug: "almacen-naturista", name: "Almacén Naturista", description: "Salsas, condimentos, aceites, tés, yerbas, jugos, pastas y productos de despensa para el día a día.", position: 1 },
   { slug: "barritas-y-snacks", name: "Barritas y Snacks Saludables", description: "Barritas proteicas, alfajores y snacks salados y dulces para cualquier momento del día.", position: 2 },
-  { slug: "congelados", name: "Congelados", description: "Helados, panificados y preparaciones congeladas.", position: 3 },
+  { slug: "congelados", name: "Congelados", description: "Helados, panificados y preparaciones congeladas.", position: 11 },
+  { slug: "gourmet", name: "Gourmet", description: "Salsas, aceites, vinagres, pastas y delicatessen para cocinar y regalar.", position: 3 },
   { slug: "semillas-frutos-secos-cereales", name: "Semillas, Frutos Secos y Cereales", description: "Semillas, legumbres, harinas, frutos secos, granolas, cereales y arroces a granel.", position: 4 },
   { slug: "suplementos-deportivos", name: "Suplementos Deportivos", description: "Proteínas, creatina y suplementos para tu entrenamiento.", position: 5 },
   { slug: "te-y-yerba", name: "Té y Yerba", description: "Yerbas mate, tés en saquitos y en hebras.", position: 6 },
@@ -526,7 +528,7 @@ const categories: CategorySeed[] = [
   { slug: "endulzantes-y-dulces", name: "Endulzantes y Dulces Naturales", description: "Mieles, mermeladas, endulzantes naturales y chocolates.", position: 8 },
   { slug: "refrigerados", name: "Refrigerados", description: "Lácteos, fiambres, tartas y preparaciones frescas que necesitan frío.", position: 9 },
   { slug: "yogur", name: "Yogur", description: "Yogures y postres lácteos frescos.", position: 10 },
-  { slug: "cosmetica", name: "Cosmetica", description: "Cosmética natural: desodorantes, cuidado de la piel y más.", position: 11 },
+  { slug: "cosmetica", name: "Cosmetica", description: "Cosmética natural: desodorantes, cuidado de la piel y más.", position: 12 },
 ];
 
 type RealProduct = {
