@@ -100,6 +100,7 @@ const SHOWCASE_IMAGES: Record<string, string> = {
   "te-y-yerba": "/category-showcase/te-y-yerba.png",
   "endulzantes-y-dulces": "/category-showcase/endulzantes-y-dulces.png",
   "galletitas": "/category-showcase/galletitas.png",
+  "gourmet": "/category-showcase/gourmet.png",
 };
 
 /** Active product count + curated cutout photo per category, for the homepage showcase. */
